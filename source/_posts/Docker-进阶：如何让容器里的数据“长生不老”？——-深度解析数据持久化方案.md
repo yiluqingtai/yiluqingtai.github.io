@@ -6,7 +6,7 @@ tags:
   - Docker
 categories:
   - 教程
-description: 
+excerpt: 这篇文章将带你深入理解 Docker 数据持久化的原理，以及如何通过不同的方案，让容器里的数据“长生不老”。
 ---
 
 ### 引言：容器的“短暂人生”与数据的“永恒追求”
