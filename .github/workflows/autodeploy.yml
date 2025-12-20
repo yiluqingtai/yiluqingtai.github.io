@@ -39,5 +39,5 @@ jobs:
         git config --global user.name "yiluqingtai"
         git config --global user.email "yiluqingtai@gmail.com"
         hexo clean
-        hexo generate
+        hexo generate --list-posts
         hexo deploy
