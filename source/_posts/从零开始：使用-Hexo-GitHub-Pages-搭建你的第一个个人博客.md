@@ -1,15 +1,18 @@
-title: 从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客
-author: yiluqingtai
-tags:
-  - Hexo
-categories:
-  - 教程
-toc: true
-date: 2025-12-20 08:06:00
 ---
-最好的种树时间是十年前，其次是现在。写博客也是。
+author: yiluqingtai
+categories: 技术教程
+date: 2025-12-20 08:06:00
+excerpt: 本文开启 Hexo 博客搭建实战，深度解析“数字花园”理念，并详述 Node.js 与 Git 环境配置。助你零成本构建高性能、Markdown
+  原生支持的个人静态博客系统。
+tags:
+- Hexo
+- 博客搭建
+- Node.js
+title: 从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客
+toc: true
+---
 
-<!-- more -->
+最好的种树时间是十年前，其次是现在。写博客也是。
 
 ## 1. 前言 (Introduction)
 

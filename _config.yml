@@ -39,6 +39,7 @@ highlight:
   wrap: true
   hljs: false
 prismjs:
+  enable: false
   preprocess: true
   line_number: true
   tab_replace: ''
@@ -59,11 +60,6 @@ include: null
 exclude: null
 ignore: null
 theme: icarus
-mermaid:
-  enable: true
-  version: "10.2.3" # 或者最新版
-  options:
-    theme: 'default'
 deploy:
   type: git
   repo: git@github.com:yiluqingtai/yiluqingtai.github.io.git

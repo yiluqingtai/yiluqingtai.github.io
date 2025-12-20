@@ -1,13 +1,14 @@
 ---
-title: Docker 零基础入门：从“代码能跑”到“环境自由”
 author: yiluqingtai
-tags:
-  - Docker
-categories:
-  - 教程
-excerpt: 这篇文章将带你从“代码能跑”到“环境自由”，带你了解 Docker 这个神奇的工具，以及它是如何帮助你解决环境不一致问题的。
-toc: true
+categories: 容器化技术
 date: 2025-12-20 11:20:00
+excerpt: 深度解析 Docker 核心原理，直击“在我机器上没问题”的开发痛点。通过镜像与容器的形象比喻，拆解分层结构与环境隔离机制，带你告别繁琐配置，实现从“环境地狱”到“环境自由”的跨越。
+tags:
+- Docker
+- 容器
+- 环境配置
+title: Docker 零基础入门：从“代码能跑”到“环境自由”
+toc: true
 ---
 
 ## 引言：那个困扰每个程序员的噩梦
