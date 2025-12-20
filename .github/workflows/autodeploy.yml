@@ -1,0 +1,43 @@
+name: Hexo Auto Deploy
+
+on:
+  push:
+    branches:
+      - source  # 只有当推送的分支是 source 时才触发。你可以根据你的源码分支名修改
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+      with:
+        submodules: true # 如果你的主题是 git clone 来的，这行很重要
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22' # 指定 Node 版本
+
+    - name: Install dependencies
+      run: |
+        npm install -g hexo-cli
+        npm install
+
+    - name: Setup SSH
+      env:
+        ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_PRI }}
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Deploy
+      run: |
+        git config --global user.name "yiluqingtai"
+        git config --global user.email "yiluqingtai@gmail.com"
+        hexo clean
+        hexo generate
+        hexo deploy
