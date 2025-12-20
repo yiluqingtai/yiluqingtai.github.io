@@ -3,3 +3,4 @@ public/
 .deploy_git/
 db.json
 publish.py
+publish.sh
