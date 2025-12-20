@@ -1,12 +1,12 @@
 ---
-title: Leetcode704-二分查找
+categories: 算法
 date: 2024-05-07 23:01:00
-categories: 每日一题
+excerpt: 本文解析 LeetCode 704 二分查找算法，详细阐述闭区间实现逻辑。通过 Go 语言示例演示如何精准控制边界条件，助力掌握基础查找算法核心原理。
 tags:
-    - LC-简单
-    - 二分查找
-    - ★★★
-excerpt: 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
+- 二分查找
+- LeetCode
+- Go
+title: Leetcode704-二分查找
 ---
 
 [704. 二分查找 - 力扣（LeetCode）](https://leetcode.cn/problems/binary-search/description/)
@@ -30,4 +30,3 @@ func search(nums []int, target int) int {
     return -1
 }
 ```
-

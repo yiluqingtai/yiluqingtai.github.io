@@ -1,11 +1,11 @@
 ---
 categories: Docker
 date: 2025-12-20 11:51:54
-excerpt: 本文从 IaC 视角深度解析 Dockerfile 构建艺术。剖析镜像分层存储机制与写时复制陷阱，探讨工业级镜像的四大标准，带你掌握底层原理与多阶段构建技巧，实现从命令堆砌到优雅构建的跨越。
+excerpt: 本文将 Dockerfile 定义为基础设施即代码（IaC）的基石，深度解析工业级镜像的四大标准。通过拆解镜像层（Layer）底层机制与写时复制（CoW）逻辑，带你从简单的命令堆砌转向优雅的镜像构建艺术。
 tags:
 - Dockerfile
-- 镜像优化
-- DevOps
+- 镜像分层
+- IaC
 title: Dockerfile 深度进阶：构建高性能、生产级镜像的艺术
 toc: true
 ---

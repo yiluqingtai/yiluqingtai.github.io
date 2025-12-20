@@ -1,12 +1,13 @@
 ---
-title: Leetcode69-x的平方根
+categories: 算法
 date: 2024-05-12 17:09:17
-categories: 每日一题
+excerpt: 本文介绍了 LeetCode 第 69 题“x 的平方根”的闭区间二分查找解法。通过 Go 语言实现，详细展示了如何利用单调性在 O(log x)
+  时间复杂度下定位最大整数平方根，是理解二分搜索边界处理的经典案例。
 tags:
-    - LC-简单
-    - 二分查找
-    - ★★★
-excerpt: 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+- 二分查找
+- LeetCode
+- Go
+title: Leetcode69-x的平方根
 ---
 
 [69. x 的平方根 - 力扣（LeetCode）](https://leetcode.cn/problems/sqrtx/)
@@ -28,4 +29,3 @@ func mySqrt(x int) int {
     return res
 }
 ```
-

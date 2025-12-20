@@ -1,12 +1,13 @@
 ---
-title: Leetcode26-删除有序数组中的重复项
+categories: 算法
 date: 2024-05-05 22:52:23
-categories: 每日一题
+excerpt: 本文介绍 LeetCode 第 26 题“删除有序数组中的重复项”的解法。利用快慢指针技巧，在 $O(1)$ 额外空间复杂度下实现原地修改数组，高效剔除冗余元素并返回新长度，提供简洁的
+  Go 语言代码实现。
 tags:
-    - LC-简单
-    - 数组
-    - ★
-excerpt: 给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。
+- 双指针
+- LeetCode
+- Go
+title: Leetcode26-删除有序数组中的重复项
 ---
 
 [26. 删除有序数组中的重复项 - 力扣（LeetCode）](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
@@ -26,4 +27,3 @@ func removeDuplicates(nums []int) int {
     return slow + 1
 }
 ```
-

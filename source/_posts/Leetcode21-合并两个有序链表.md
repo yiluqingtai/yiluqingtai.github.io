@@ -1,12 +1,12 @@
 ---
-title: Leetcode21.合并两个有序链表
+categories: 算法
 date: 2024-05-05 22:50:22
-categories: 每日一题
+excerpt: 本文深入探讨了“合并两个有序链表”的两种核心解法：迭代法与递归法。通过Go语言实现，详细展示了如何利用哨兵节点优化迭代逻辑，以及如何构建简洁的递归模型，是掌握链表操作技巧的经典算法案例。
 tags:
-    - LC-简单
-    - 链表
-    - ★★
-excerpt: 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+- LeetCode
+- 链表
+- Go
+title: Leetcode21.合并两个有序链表
 ---
 
 [21. 合并两个有序链表 - 力扣（LeetCode）](https://leetcode.cn/problems/merge-two-sorted-lists/description/)

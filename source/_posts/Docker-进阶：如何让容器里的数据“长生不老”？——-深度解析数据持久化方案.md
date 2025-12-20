@@ -1,11 +1,12 @@
 ---
-categories: 容器技术
+categories: Docker
 date: 2025-12-20 11:44:40
-excerpt: 深入剖析 Docker 数据持久化机制，从 UnionFS 原理解析容器“失忆”真相，并详细对比 Volumes、Bind Mounts 等核心方案，助你构建稳固的容器化数据存储体系。
+excerpt: 本文深入探讨 Docker 数据持久化的核心机制。从容器“失忆”的底层原理出发，解析联合文件系统（UnionFS）与写时复制（CoW）技术，并系统介绍解决数据丢失的三大方案：Volumes、Bind
+  Mounts 和 tmpfs。
 tags:
 - Docker
 - 数据持久化
-- 存储驱动
+- 容器技术
 title: Docker 进阶：如何让容器里的数据“长生不老”？—— 深度解析数据持久化方案
 toc: true
 ---

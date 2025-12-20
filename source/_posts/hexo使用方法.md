@@ -1,9 +1,13 @@
 ---
-title: Hexo使用方法
+categories: 技术教程
 date: 2024-05-04 16:08:34
-tags: Hexo
-categories: 教程
-excerpt: hexo使用方法记录
+excerpt: 本文详细介绍了 Hexo 静态博客框架的基础操作，涵盖环境安装、本地预览及 GitHub 部署配置，并重点解析了 post、page、draft
+  等文章布局模式及其发布流程，是快速上手 Hexo 博客运维的实用指南。
+tags:
+- Hexo
+- 博客搭建
+- 静态网站
+title: Hexo使用方法
 ---
 
 ## 创建hexo仓库

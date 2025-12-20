@@ -1,12 +1,12 @@
 ---
-title: Leetcode9-回文数
+categories: 算法
 date: 2024-05-12 17:20:30
-categories: 每日一题
+excerpt: 本文介绍了 LeetCode 第 9 题“回文数”的 Go 语言实现。通过巧妙反转整数的一半，有效规避了潜在的溢出风险并提升了执行效率，是数值类算法题中的经典解法。
 tags:
-    - LC-简单
-    - 数学
-    - ★★★
-excerpt: 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false。 回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+- LeetCode
+- Go
+- 回文数
+title: Leetcode9-回文数
 ---
 
 [9. 回文数 - 力扣（LeetCode）](https://leetcode.cn/problems/palindrome-number/description/)
@@ -28,4 +28,3 @@ func isPalindrome(x int) bool {
     return reverseNum == x || reverseNum / 10 == x
 }
 ```
-

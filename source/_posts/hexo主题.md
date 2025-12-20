@@ -1,9 +1,12 @@
 ---
-title: Hexo主题
+categories: 技术教程
 date: 2024-05-04 16:13:04
-tags: Hexo
-categories: 教程
-excerpt: 选几款好用的hexo主题
+excerpt: 探索并记录了 Hexo 热门主题 Icarus 的安装过程与初次体验。文章分享了多款精选 Hexo 主题资源，并针对 Icarus 的基础安装、侧边栏配置及
+  Markdown 存图方案等常见博客搭建问题展开初步探讨。
+tags:
+- Hexo
+- icarus
+title: Hexo主题
 ---
 
 ## 最佳的10个主题

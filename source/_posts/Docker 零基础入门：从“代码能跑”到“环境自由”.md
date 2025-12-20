@@ -1,11 +1,11 @@
 ---
 author: yiluqingtai
-categories: 容器化技术
+categories: Docker
 date: 2025-12-20 11:20:00
-excerpt: 深度解析 Docker 核心原理，直击“在我机器上没问题”的开发痛点。通过镜像与容器的形象比喻，拆解分层结构与环境隔离机制，带你告别繁琐配置，实现从“环境地狱”到“环境自由”的跨越。
+excerpt: 本文直击程序员面临的“环境一致性”痛点，深入浅出地解析了 Docker 的核心逻辑。通过生动的比喻阐述了镜像（Image）的分层只读特性与容器（Container）的隔离运行机制，助力开发者跨越“环境地狱”，实现标准化的应用交付与部署。
 tags:
 - Docker
-- 容器
+- 容器化
 - 环境配置
 title: Docker 零基础入门：从“代码能跑”到“环境自由”
 toc: true

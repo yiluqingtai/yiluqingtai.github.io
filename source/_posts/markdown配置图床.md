@@ -1,9 +1,13 @@
 ---
-title: Markdown配置图床
-date: 2024-05-04 16:24:10
-tags: Hexo
 categories: Markdown
-excerpt: 如何方便地为markdown配图呢？
+date: 2024-05-04 16:24:10
+excerpt: 本文介绍了如何通过 Typora、PicGo 与 SM.MS 快速搭建 Markdown 自动化图床环境。涵盖了从 API Token 获取到上传服务配置的全过程，旨在解决
+  Markdown 写作中的图片存储与跨平台迁移难题。
+tags:
+- Typora
+- PicGo
+- 图床
+title: Markdown配置图床
 ---
 
 ## 工具
