@@ -1,3 +1,12 @@
+title: Docker 零基础入门：从“代码能跑”到“环境自由”
+author: yiluqingtai
+tags:
+  - Docker
+categories:
+  - 教程
+toc: true
+date: 2025-12-20 11:20:00
+
 ## 引言：那个困扰每个程序员的噩梦
 
 ### 1. 那个困扰每个程序员的深夜噩梦
