@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>进阶篇：如何打造极致的 Hexo 写作流 —— GitHub Actions 自动化部署全指南 - Yiluqingtai&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="yiluqingtai"><meta name="msapplication-TileImage" content="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="yiluqingtai"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文详细介绍了如何利用 GitHub Actions 实现 Hexo 博客的自动化部署，解决传统手动发布流程的痛点，实现“只管写 Markdown，其余交给云端”的极致写作体验。"><meta property="og:type" content="blog"><meta property="og:title" content="进阶篇：如何打造极致的 Hexo 写作流 —— GitHub Actions 自动化部署全指南"><meta property="og:url" content="https://yiluqingtai.github.io/2025/12/20/%E8%BF%9B%E9%98%B6%E7%AF%87%EF%BC%9A%E5%A6%82%E4%BD%95%E6%89%93%E9%80%A0%E6%9E%81%E8%87%B4%E7%9A%84-Hexo-%E5%86%99%E4%BD%9C%E6%B5%81-%E2%80%94%E2%80%94-GitHub-Actions-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E5%85%A8%E6%8C%87%E5%8D%97/"><meta property="og:site_name" content="Yiluqingtai&#039;s Blog"><meta property="og:description" content="本文详细介绍了如何利用 GitHub Actions 实现 Hexo 博客的自动化部署，解决传统手动发布流程的痛点，实现“只管写 Markdown，其余交给云端”的极致写作体验。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://yiluqingtai.github.io/img/og_image.png"><meta property="article:published_time" content="2025-12-20T05:35:00.000Z"><meta property="article:author" content="yiluqingtai"><meta property="article:tag" content="Hexo"><meta property="article:tag" content="GitHub Actions"><meta property="article:tag" content="自动化部署"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://yiluqingtai.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://yiluqingtai.github.io/2025/12/20/%E8%BF%9B%E9%98%B6%E7%AF%87%EF%BC%9A%E5%A6%82%E4%BD%95%E6%89%93%E9%80%A0%E6%9E%81%E8%87%B4%E7%9A%84-Hexo-%E5%86%99%E4%BD%9C%E6%B5%81-%E2%80%94%E2%80%94-GitHub-Actions-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E5%85%A8%E6%8C%87%E5%8D%97/"},"headline":"进阶篇：如何打造极致的 Hexo 写作流 —— GitHub Actions 自动化部署全指南","image":["https://yiluqingtai.github.io/img/og_image.png"],"datePublished":"2025-12-20T05:35:00.000Z","author":{"@type":"Person","name":"yiluqingtai"},"publisher":{"@type":"Organization","name":"Yiluqingtai's Blog","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/16957962?s=96&v=4"}},"description":"本文详细介绍了如何利用 GitHub Actions 实现 Hexo 博客的自动化部署，解决传统手动发布流程的痛点，实现“只管写 Markdown，其余交给云端”的极致写作体验。"}</script><link rel="canonical" href="https://yiluqingtai.github.io/2025/12/20/%E8%BF%9B%E9%98%B6%E7%AF%87%EF%BC%9A%E5%A6%82%E4%BD%95%E6%89%93%E9%80%A0%E6%9E%81%E8%87%B4%E7%9A%84-Hexo-%E5%86%99%E4%BD%9C%E6%B5%81-%E2%80%94%E2%80%94-GitHub-Actions-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2%E5%85%A8%E6%8C%87%E5%8D%97/"><link rel="icon" href="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script>
+    <style>
+        /* 1. 整体容器和比例保持 */
+        .container { max-width: 1440px !important; width: 95% !important; }
+        .column.is-6-widescreen, .column.is-8-desktop, .column.is-8-tablet { flex: none !important; width: 60% !important; }
+        .column.is-3-widescreen, .column.is-4-desktop { flex: none !important; width: 20% !important; }
+
+        /* 2. 目录滚动核心修复 */
+        /* 针对 Icarus 的 TOC 挂件内部容器进行限高 */
+        .widget[data-type="toc"] .card-content, 
+        .widget.toc .card-content {
+            max-height: 70vh !important;    /* 限制为屏幕高度的 70% */
+            overflow-y: auto !important;   /* 强制开启垂直滚动 */
+            display: block !important;
+        }
+
+        /* 3. 美化目录滚动条（可选，让它更细一点） */
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar-thumb {
+            background: #dbdbdb;
+            border-radius: 10px;
+        }
+
+        /* 4. 如果侧边栏设置了 sticky: true，确保它不会把底部切掉 */
+        .column-left, .column-right {
+            align-self: flex-start; 
+            height: auto;
+        }
+    </style>
+    
+    <style>
+        /* 1. 初始隐藏，防止闪烁 */
+        .highlight.plaintext, .highlight.mermaid, .highlight.language-mermaid {
+            /* 我们稍后通过 JS 逻辑判断是否隐藏 */
+        }
+        .mermaid {
+            background: white !important;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            /* 修复文字截断的核心 */
+            line-height: 1.2 !important;
+            font-family: Arial !important;
+        }
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto;
+        }
+    </style>
+    <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-12-20T05:35:00.000Z" title="12/20/2025, 5:35:00 AM">2025-12-20</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">技术教程</a></span><span class="level-item">9 分钟读完 (大约1331个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">进阶篇：如何打造极致的 Hexo 写作流 —— GitHub Actions 自动化部署全指南</h1><div class="content"><h3 id="1-为什么要搞自动化？"><a href="#1-为什么要搞自动化？" class="headerlink" title="1. 为什么要搞自动化？"></a>1. 为什么要搞自动化？</h3><p>传统的 Hexo 发布流程是这样的：</p>
+<ol>
+<li>本地写 Markdown。</li>
+<li>运行 <code>hexo clean</code>。</li>
+<li>运行 <code>hexo g</code>。</li>
+<li>运行 <code>hexo d</code>。</li>
+</ol>
+<p><strong>痛点很明显：</strong> 如果换了电脑，你得重新配 Node.js 环境；如果你在公司想改个错别字，没环境就改不了；如果你想在手机上写，那基本无望。</p>
+<p><strong>极致写作流的目标：</strong></p>
+<p><strong>你只管写 Markdown 提交到 GitHub，剩下的编译、生成、发布，全部由 GitHub 的云端服务器（Actions）自动完成。</strong></p>
+<hr>
+<h3 id="2-核心思路"><a href="#2-核心思路" class="headerlink" title="2. 核心思路"></a>2. 核心思路</h3><p>我们将 GitHub 仓库分为两部分（或两个分支）：</p>
+<ul>
+<li><strong>源码（Source）：</strong> 存放你的整个 Hexo 项目文件夹（Markdown 原稿、主题、配置文件）。</li>
+<li><strong>部署（Deployment）：</strong> 存放生成的 HTML 静态页面。</li>
+</ul>
+<p><strong>自动化流程：</strong></p>
+<p>当你推送源码到 GitHub -&gt; 触发 GitHub Actions -&gt; Actions 自动启动一个 Linux 虚拟机 -&gt; 安装 Node.js -&gt; 执行 <code>hexo g -d</code> -&gt; 自动更新你的博客。</p>
+<hr>
+<h3 id="3-第一步：配置-SSH-Key（解决“权限”问题）"><a href="#3-第一步：配置-SSH-Key（解决“权限”问题）" class="headerlink" title="3. 第一步：配置 SSH Key（解决“权限”问题）"></a>3. 第一步：配置 SSH Key（解决“权限”问题）</h3><p>因为是 GitHub 的云端服务器帮你发布博客，它需要有权限往你的仓库写东西。</p>
+<ol>
+<li><p><strong>生成一对新的 SSH Key</strong>（在本地终端执行）：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">&quot;你的邮箱&quot;</span> -f github-deploy-key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> 你会得到两个文件：<code>github-deploy-key</code>（私钥）和 <code>github-deploy-key.pub</code>（公钥）。</p>
+</li>
+<li><p><strong>配置公钥：</strong></p>
+<p> 打开 GitHub 博客仓库 -&gt; <code>Settings</code> -&gt; <code>Deploy keys</code> -&gt; <code>Add deploy key</code>。</p>
+<ul>
+<li><strong>Title:</strong> 写 <code>Hexo_Deploy_Pub</code></li>
+<li><strong>Key:</strong> 把 <code>.pub</code> 文件的内容全部贴进去。</li>
+<li><strong>重要：</strong> 勾选 <code>Allow write access</code>（允许写入权限）。</li>
+</ul>
+</li>
+<li><p><strong>配置私钥：</strong></p>
+<p> 回到仓库 -&gt; <code>Settings</code> -&gt; <code>Secrets and variables</code> -&gt; <code>Actions</code> -&gt; <code>New repository secret</code>。</p>
+<ul>
+<li><strong>Name:</strong> <code>HEXO_DEPLOY_PRI</code></li>
+<li><strong>Secret:</strong> 把不带后缀的那个私钥文件内容全部贴进去。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="4-第二步：编写自动化脚本-Workflow"><a href="#4-第二步：编写自动化脚本-Workflow" class="headerlink" title="4. 第二步：编写自动化脚本 (Workflow)"></a>4. 第二步：编写自动化脚本 (Workflow)</h3><p>在你的 Hexo 根目录下，创建文件夹 <code>.github/workflows/</code>（注意前面有个点），并在里面新建一个文件 <code>autodeploy.yml</code>。</p>
+<p>将以下内容贴进去：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Hexo</span> <span class="string">Auto</span> <span class="string">Deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">source</span>  <span class="comment"># 只有当推送的分支是 source 时才触发。你可以根据你的源码分支名修改</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">source</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">submodules:</span> <span class="literal">true</span> <span class="comment"># 如果你的主题是 git clone 来的，这行很重要</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">Node.js</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-node@v3</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">node-version:</span> <span class="string">&#x27;20&#x27;</span> <span class="comment"># 指定 Node 版本</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">dependencies</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        npm install -g hexo-cli</span></span><br><span class="line"><span class="string">        npm install</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">SSH</span></span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="attr">ACTION_DEPLOY_KEY:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.HEXO_DEPLOY_PRI</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        mkdir -p ~/.ssh/</span></span><br><span class="line"><span class="string">        echo &quot;$ACTION_DEPLOY_KEY&quot; &gt; ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">        chmod 600 ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">        ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        git config --global user.name &quot;你的用户名&quot;</span></span><br><span class="line"><span class="string">        git config --global user.email &quot;你的邮箱&quot;</span></span><br><span class="line"><span class="string">        hexo clean</span></span><br><span class="line"><span class="string">        hexo generate</span></span><br><span class="line"><span class="string">        hexo deploy</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-第三步：修改站点配置文件"><a href="#5-第三步：修改站点配置文件" class="headerlink" title="5. 第三步：修改站点配置文件"></a>5. 第三步：修改站点配置文件</h3><p>确保你的根目录 <code>_config.yml</code> 里的 <code>deploy</code> 部分使用的是 <strong>SSH 地址</strong>而不是 HTTPS 地址：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span>  <span class="comment"># 部署的目标分支</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="6-极致体验：现在你可以怎么写博客？"><a href="#6-极致体验：现在你可以怎么写博客？" class="headerlink" title="6. 极致体验：现在你可以怎么写博客？"></a>6. 极致体验：现在你可以怎么写博客？</h3><p>配置完成后，你的开发流程变成了：</p>
+<ol>
+<li><p><strong>本地&#x2F;在线创作：</strong></p>
+<ul>
+<li>你可以在本地用 Typora 写。</li>
+<li>你甚至可以直接在 GitHub 网页上，进入 <code>source/_posts</code> 新建一个 <code>.md</code> 文件直接写。</li>
+</ul>
+</li>
+<li><p><strong>一键提交：</strong></p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;新增文章：我的自动化之路&quot;</span></span><br><span class="line">git push origin <span class="built_in">source</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>云端接管：</strong>打开 GitHub 的 <code>Actions</code> 选项卡，你会看到一个绿色的转圈。1 分钟后，Actions 跑完，你的新文章就自动出现在博客上了。</p>
+</li>
+</ol>
+<hr>
+<h3 id="7-再进阶：图片怎么搞最丝滑？-Typora-PicGo"><a href="#7-再进阶：图片怎么搞最丝滑？-Typora-PicGo" class="headerlink" title="7. 再进阶：图片怎么搞最丝滑？ (Typora + PicGo)"></a>7. 再进阶：图片怎么搞最丝滑？ (Typora + PicGo)</h3><p>为了让“极致写作流”名副其实，图片处理不能拖后腿。</p>
+<ul>
+<li><strong>配置图床：</strong> 下载 <strong>PicGo</strong> 客户端，配置 GitHub 作为一个仓库图床。</li>
+<li><strong>配合 Typora：</strong> 在 Typora 设置中开启“上传图片”功能。</li>
+<li><strong>效果：</strong> 你在写 Markdown 时，直接把本地图片或截图往 Typora 里一粘，图片自动上传 GitHub，Markdown 里自动生成链接。</li>
+<li><strong>结果：</strong> 整个 Markdown 文件只有纯文字，没有任何本地路径依赖。这意味着你可以<strong>在任何设备打开这个文件，图片都能正常显示。</strong></li>
+</ul>
+<hr>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>通过 <strong>GitHub Actions + SSH Keys + Typora&#x2F;PicGo</strong>，你已经构建了一套准工业级的自动化发布系统。</p>
+<p>你不再需要关心 Node.js 环境，不再需要记冗长的 Hexo 命令。你唯一要做的，就是打开编辑器，记录你的思想。这才是独立博客最理想的状态——<strong>让工具隐身，让创作回归。</strong></p>
+<hr>
+<p>💡 避坑小贴士：</p>
+<ul>
+<li><strong>node_modules 记得忽略：</strong> 确保 <code>.gitignore</code> 里有 <code>node_modules</code>，不要把这个几万个文件的文件夹推送到 GitHub，Actions 会自己安装。</li>
+<li><strong>私钥保护：</strong> 绝对不要把私钥明文写在 <code>.yml</code> 文件里，必须通过 <code>Secrets</code> 调用。</li>
+<li><strong>主题文件：</strong> 如果你的主题是下载的，请确保主题文件夹里的 <code>.git</code> 文件夹被删除了，否则 Actions 无法读取主题内容。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>进阶篇：如何打造极致的 Hexo 写作流 —— GitHub Actions 自动化部署全指南</p><p><a href="https://yiluqingtai.github.io/2025/12/20/进阶篇：如何打造极致的-Hexo-写作流-——-GitHub-Actions-自动化部署全指南/">https://yiluqingtai.github.io/2025/12/20/进阶篇：如何打造极致的-Hexo-写作流-——-GitHub-Actions-自动化部署全指南/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>yiluqingtai</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-12-20</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Hexo/">Hexo</a><a class="link-muted mr-2" rel="tag" href="/tags/GitHub-Actions/">GitHub Actions</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/">自动化部署</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/12/20/Hexo-%E8%BF%9B%E9%98%B6%EF%BC%9A%E6%89%93%E9%80%A0%E6%9E%81%E8%87%B4%E8%87%AA%E5%8A%A8%E5%8C%96%E4%B8%8E-AI-%E8%B5%8B%E8%83%BD%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Hexo 进阶：打造极致自动化与 AI 赋能的技术博客</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/12/20/Dockerfile-%E6%B7%B1%E5%BA%A6%E8%BF%9B%E9%98%B6%EF%BC%9A%E6%9E%84%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BD%E3%80%81%E7%94%9F%E4%BA%A7%E7%BA%A7%E9%95%9C%E5%83%8F%E7%9A%84%E8%89%BA%E6%9C%AF/"><span class="level-item">Dockerfile 深度进阶：构建高性能、生产级镜像的艺术</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="yiluqingtai"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">yiluqingtai</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives/"><p class="title">36</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories/"><p class="title">12</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags/"><p class="title">78</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/yiluqingtai" target="_blank" rel="me noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Github" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-为什么要搞自动化？"><span class="level-left"><span class="level-item">1. 为什么要搞自动化？</span></span></a></li><li><a class="level is-mobile" href="#2-核心思路"><span class="level-left"><span class="level-item">2. 核心思路</span></span></a></li><li><a class="level is-mobile" href="#3-第一步：配置-SSH-Key（解决“权限”问题）"><span class="level-left"><span class="level-item">3. 第一步：配置 SSH Key（解决“权限”问题）</span></span></a></li><li><a class="level is-mobile" href="#4-第二步：编写自动化脚本-Workflow"><span class="level-left"><span class="level-item">4. 第二步：编写自动化脚本 (Workflow)</span></span></a></li><li><a class="level is-mobile" href="#5-第三步：修改站点配置文件"><span class="level-left"><span class="level-item">5. 第三步：修改站点配置文件</span></span></a></li><li><a class="level is-mobile" href="#6-极致体验：现在你可以怎么写博客？"><span class="level-left"><span class="level-item">6. 极致体验：现在你可以怎么写博客？</span></span></a></li><li><a class="level is-mobile" href="#7-再进阶：图片怎么搞最丝滑？-Typora-PicGo"><span class="level-left"><span class="level-item">7. 再进阶：图片怎么搞最丝滑？ (Typora + PicGo)</span></span></a></li><li><a class="level is-mobile" href="#结语"><span class="level-left"><span class="level-item">结语</span></span></a></li></ul></div></div><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Markdown/"><span class="level-start"><span class="level-item">Markdown</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="level-start"><span class="level-item">大数据</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"><span class="level-start"><span class="level-item">大模型</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/"><span class="level-start"><span class="level-item">室内绿植</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"><span class="level-start"><span class="level-item">技术教程</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E8%B5%84%E6%BA%90/"><span class="level-start"><span class="level-item">技术资源</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"><span class="level-start"><span class="level-item">生活随笔</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D/"><span class="level-start"><span class="level-item">经济金融</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%8C%B6/"><span class="level-start"><span class="level-item">茶</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/"><span class="level-start"><span class="level-item">读后感</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-11T13:15:23.000Z">2026-01-11</time></p><p class="title"><a href="/2026/01/11/%E9%83%BD%E5%B8%82%E7%BB%BF%E6%B4%B2%E5%85%BB%E6%88%90%E8%AE%B0%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AE%A9%E6%8C%BA%E6%8B%94%E7%9A%84%E8%99%8E%E7%9A%AE%E5%85%B0%E6%88%90%E4%B8%BA%E4%BD%A0%E5%AE%A4%E5%86%85%E7%9A%84%E2%80%9C%E4%BD%8E%E8%80%97%E8%83%BD%E4%BF%9D%E9%95%96%E2%80%9D%EF%BC%9F/">都市绿洲养成记：如何让挺拔的虎皮兰成为你室内的“低耗能保镖”？</a></p><p class="categories"><a href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/">室内绿植</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T14:50:26.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82-Spark%EF%BC%9A%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E3%80%81%E7%94%9F%E6%80%81%E5%8D%8F%E5%90%8C%E4%B8%8E%E4%BC%81%E4%B8%9A%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B/">一文搞懂 Spark：核心原理、生态协同与企业实战选型</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T01:46:34.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E3%80%90%E6%95%B0%E6%8D%AE%E6%B1%9F%E6%B9%96%E5%85%B5%E5%99%A8%E8%B0%B1%E3%80%91%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E7%9A%84%E2%80%9C%E8%A7%92%E8%89%B2%E2%80%9D%E4%B8%8E%E2%80%9C%E5%86%85%E5%8A%9F%E2%80%9D-Kafka-Spark-Hive-Flink-ClickHouse/">【数据江湖兵器谱】一文读懂主流大数据工具的“角色”与“内功” (Kafka/Spark/Hive/Flink/ClickHouse)</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-07T15:29:11.000Z">2026-01-07</time></p><p class="title"><a href="/2026/01/07/AI-%E6%B5%AA%E6%BD%AE%E4%B8%8B%EF%BC%8C%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E2%80%9C%E4%B8%8A%E8%BD%A6%E2%80%9D%EF%BC%9F%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B0%B1%E4%B8%9A%E7%9A%84-6-%E5%A4%A7%E7%BB%86%E5%88%86%E6%96%B9%E5%90%91%E5%85%A8%E8%A7%A3%E6%9E%90/">AI 浪潮下，普通程序员如何“上车”？大模型就业的 6 大细分方向全解析</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-06T01:24:41.000Z">2026-01-06</time></p><p class="title"><a href="/2026/01/06/%E7%BB%99%E6%96%B0%E6%89%8B%E7%9A%84%E8%8C%B6%E5%8F%B6%E9%80%9A%E5%85%B3%E6%89%8B%E5%86%8C%EF%BC%9A%E4%BB%8E%E2%80%9C%E7%BB%BF%E8%8C%B6%E5%B0%8F%E7%99%BD%E2%80%9D%E5%88%B0%E2%80%9C%E5%93%81%E8%8C%97%E9%AB%98%E6%89%8B%E2%80%9D%E5%8F%AA%E9%9C%80%E8%BF%99%E4%B8%80%E7%AF%87/">给新手的茶叶通关手册：从“绿茶小白”到“品茗高手”只需这一篇</a></p><p class="categories"><a href="/categories/%E8%8C%B6/">茶</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2026 yiluqingtai</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script><!-- hexo injector body_end start -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script>
+    (function() {
+        const mermaidKeywords = ['graph ', 'sequenceDiagram', 'gantt', 'classDiagram', 'stateDiagram', 'pie', 'erDiagram', 'journey'];
+
+        function renderMermaid() {
+            if (!window.mermaid) return;
+
+            // 扫描所有的 highlight 代码块
+            const blocks = document.querySelectorAll('.highlight');
+            
+            blocks.forEach(block => {
+                const codeElement = block.querySelector('.code');
+                if (!codeElement) return;
+                
+                const rawCode = codeElement.innerText.trim();
+                
+                // 检查开头是否符合 Mermaid 语法
+                const isMermaid = mermaidKeywords.some(kw => rawCode.startsWith(kw));
+                
+                if (isMermaid) {
+                    const container = document.createElement('div');
+                    container.className = 'mermaid';
+                    container.textContent = rawCode;
+
+                    // 替换掉整个 figure 标签
+                    block.parentNode.insertBefore(container, block);
+                    block.remove();
+                }
+            });
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose',
+                flowchart: { 
+                    htmlLabels: false, // 设为 false 能极大缓解文字溢出问题
+                    useMaxWidth: true 
+                }
+            });
+            
+            mermaid.run();
+        }
+
+        window.addEventListener('load', renderMermaid);
+        document.addEventListener('pjax:success', renderMermaid);
+    })();
+    </script>
+    <!-- hexo injector body_end end --></body></html>

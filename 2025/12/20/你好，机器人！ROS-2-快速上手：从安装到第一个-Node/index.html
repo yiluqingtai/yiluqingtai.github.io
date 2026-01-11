@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>你好，机器人！ROS 2 快速上手：从安装到第一个 Node - Yiluqingtai&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="yiluqingtai"><meta name="msapplication-TileImage" content="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="yiluqingtai"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文深入探讨了ROS 2作为机器人开发核心中间件的必要性，对比了ROS 1与ROS 2的关键差异，并提供了针对新手的ROS 2 Humble版本在Ubuntu 22.04上的详细环境搭建指南。"><meta property="og:type" content="blog"><meta property="og:title" content="你好，机器人！ROS 2 快速上手：从安装到第一个 Node"><meta property="og:url" content="https://yiluqingtai.github.io/2025/12/20/%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%81ROS-2-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%9A%E4%BB%8E%E5%AE%89%E8%A3%85%E5%88%B0%E7%AC%AC%E4%B8%80%E4%B8%AA-Node/"><meta property="og:site_name" content="Yiluqingtai&#039;s Blog"><meta property="og:description" content="本文深入探讨了ROS 2作为机器人开发核心中间件的必要性，对比了ROS 1与ROS 2的关键差异，并提供了针对新手的ROS 2 Humble版本在Ubuntu 22.04上的详细环境搭建指南。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://yiluqingtai.github.io/img/og_image.png"><meta property="article:published_time" content="2025-12-20T09:33:24.000Z"><meta property="article:author" content="yiluqingtai"><meta property="article:tag" content="ROS 2"><meta property="article:tag" content="机器人开发"><meta property="article:tag" content="环境搭建"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://yiluqingtai.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://yiluqingtai.github.io/2025/12/20/%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%81ROS-2-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%9A%E4%BB%8E%E5%AE%89%E8%A3%85%E5%88%B0%E7%AC%AC%E4%B8%80%E4%B8%AA-Node/"},"headline":"你好，机器人！ROS 2 快速上手：从安装到第一个 Node","image":["https://yiluqingtai.github.io/img/og_image.png"],"datePublished":"2025-12-20T09:33:24.000Z","author":{"@type":"Person","name":"yiluqingtai"},"publisher":{"@type":"Organization","name":"Yiluqingtai's Blog","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/16957962?s=96&v=4"}},"description":"本文深入探讨了ROS 2作为机器人开发核心中间件的必要性，对比了ROS 1与ROS 2的关键差异，并提供了针对新手的ROS 2 Humble版本在Ubuntu 22.04上的详细环境搭建指南。"}</script><link rel="canonical" href="https://yiluqingtai.github.io/2025/12/20/%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%9C%BA%E5%99%A8%E4%BA%BA%EF%BC%81ROS-2-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%9A%E4%BB%8E%E5%AE%89%E8%A3%85%E5%88%B0%E7%AC%AC%E4%B8%80%E4%B8%AA-Node/"><link rel="icon" href="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script>
+    <style>
+        /* 1. 整体容器和比例保持 */
+        .container { max-width: 1440px !important; width: 95% !important; }
+        .column.is-6-widescreen, .column.is-8-desktop, .column.is-8-tablet { flex: none !important; width: 60% !important; }
+        .column.is-3-widescreen, .column.is-4-desktop { flex: none !important; width: 20% !important; }
+
+        /* 2. 目录滚动核心修复 */
+        /* 针对 Icarus 的 TOC 挂件内部容器进行限高 */
+        .widget[data-type="toc"] .card-content, 
+        .widget.toc .card-content {
+            max-height: 70vh !important;    /* 限制为屏幕高度的 70% */
+            overflow-y: auto !important;   /* 强制开启垂直滚动 */
+            display: block !important;
+        }
+
+        /* 3. 美化目录滚动条（可选，让它更细一点） */
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar-thumb {
+            background: #dbdbdb;
+            border-radius: 10px;
+        }
+
+        /* 4. 如果侧边栏设置了 sticky: true，确保它不会把底部切掉 */
+        .column-left, .column-right {
+            align-self: flex-start; 
+            height: auto;
+        }
+    </style>
+    
+    <style>
+        /* 1. 初始隐藏，防止闪烁 */
+        .highlight.plaintext, .highlight.mermaid, .highlight.language-mermaid {
+            /* 我们稍后通过 JS 逻辑判断是否隐藏 */
+        }
+        .mermaid {
+            background: white !important;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            /* 修复文字截断的核心 */
+            line-height: 1.2 !important;
+            font-family: Arial !important;
+        }
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto;
+        }
+    </style>
+    <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-12-20T09:33:24.000Z" title="12/20/2025, 9:33:24 AM">2025-12-20</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">技术教程</a></span><span class="level-item">40 分钟读完 (大约5934个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">你好，机器人！ROS 2 快速上手：从安装到第一个 Node</h1><div class="content"><h2 id="引言：为什么是-ROS-2？"><a href="#引言：为什么是-ROS-2？" class="headerlink" title="引言：为什么是 ROS 2？"></a>引言：为什么是 ROS 2？</h2><p>在开启这段技术旅程之前，我们需要先回答一个根本性的问题：在繁杂的机器人开发领域，为什么 ROS 2 是那个你无法绕过的“入场券”？</p>
+<h3 id="1-机器人时代的“安卓”：从孤岛到生态"><a href="#1-机器人时代的“安卓”：从孤岛到生态" class="headerlink" title="1. 机器人时代的“安卓”：从孤岛到生态"></a>1. 机器人时代的“安卓”：从孤岛到生态</h3><p>想象一下，如果你要从零开始造一台能避障、能导航、能看懂路牌的自动驾驶小车。你需要写底层的电机控制驱动，需要写复杂的激光雷达算法，还要处理视觉识别和路径规划。如果每一个开发者都从拧螺丝开始，机器人行业将永远停留在“手工作坊”阶段。</p>
+<p><strong>ROS (Robot Operating System)</strong> 的出现，彻底改变了这种局面。它虽然名为“操作系统”，但其本质是一套<strong>标准化的中间件</strong>。它就像机器人界的“安卓系统”：</p>
+<ul>
+<li><strong>硬件抽象化：</strong> 无论你用的是几千块的思岚雷达，还是几万块的 Velodyne，在 ROS 里它们都输出同样的 <code>LaserScan</code> 消息。</li>
+<li><strong>模块化开发：</strong> 导航用现成的插件，感知用现成的库，你只需要专注于实现你的“核心逻辑”。</li>
+<li><strong>社区力量：</strong> 全球数以万计的工程师在为它贡献代码。当你遇到问题时，你不是在孤军奋战，而是在站在巨人的肩膀上。</li>
+</ul>
+<h3 id="2-ROS-1-vs-ROS-2：从实验室走向星辰大海"><a href="#2-ROS-1-vs-ROS-2：从实验室走向星辰大海" class="headerlink" title="2. ROS 1 vs ROS 2：从实验室走向星辰大海"></a>2. ROS 1 vs ROS 2：从实验室走向星辰大海</h3><p>既然 ROS 这么好，为什么我们要直接学习 ROS 2 而不是经典的 ROS 1？</p>
+<p>如果说 ROS 1 是为科研实验室设计的“天才原型机”，那么 ROS 2 就是为工业生产、复杂环境和商业落地打造的“全能战士”。它们的区别不仅仅是版本号的更迭，而是底层逻辑的彻底重构：</p>
+<ul>
+<li><strong>从“单点崩溃”到“分布式通信”：</strong> ROS 1 依赖一个叫 <code>Master</code> 的中心节点，如果它挂了，整个机器人就成了“植物人”。ROS 2 引入了 <strong>DDS (Data Distribution Service)</strong> 技术，去中心化通信，节点之间点对点发现，没有单点故障风险。</li>
+<li><strong>实时性 (Real-time) 的质变：</strong> 在自动驾驶或工业机械臂领域，延迟 1 毫秒可能就是一场事故。ROS 2 原生支持实时性要求，这让它从“实验室玩具”变成了“工业级大脑”。</li>
+<li><strong>跨平台的自由：</strong> ROS 1 几乎绑定在 Linux 身上，而 ROS 2 真正实现了对 Windows、macOS 以及嵌入式系统（如 RTOS）的广泛支持。</li>
+<li><strong>安全性：</strong> ROS 2 加入了加密通信机制（SROS2），防止你的机器人被黑客远程接管。</li>
+</ul>
+<p><strong>结论很明确：</strong> 如果你想掌握机器人开发的未来，ROS 2 是唯一的必经之路。</p>
+<h3 id="3-我们的目标：打破“入门即放弃”的魔咒"><a href="#3-我们的目标：打破“入门即放弃”的魔咒" class="headerlink" title="3. 我们的目标：打破“入门即放弃”的魔咒"></a>3. 我们的目标：打破“入门即放弃”的魔咒</h3><p>很多新手在学习 ROS 2 时，往往被复杂的安装命令和晦涩的专业名词（如 RMW, Colcon, Overlay）劝退。</p>
+<p>这篇文章的目标非常具体：<strong>剥离那些虚头巴脑的概念，直击本质。</strong> 我们将一起完成从“系统环境搭建”到“跑通第一个 Python 节点”的全过程。我不会只给你扔下一堆代码，而是会告诉你每一行命令背后在发生什么。</p>
+<p>这不仅仅是一篇安装手册，更是一份带你穿透迷雾的“初体验地图”。让我们开始吧，去赋予你的第一台虚拟机器人以“灵魂”。</p>
+<h2 id="第一部分：环境准备（扫清障碍）"><a href="#第一部分：环境准备（扫清障碍）" class="headerlink" title="第一部分：环境准备（扫清障碍）"></a>第一部分：环境准备（扫清障碍）</h2><p>在正式开始之前，我们需要搭建一个稳定、可靠的开发环境。对于新手来说，环境搭建往往是“放弃率”最高的一环。请记住一个原则：<strong>尽量选择主流，少走弯路。</strong></p>
+<h3 id="1-版本选择：为什么是-Humble？"><a href="#1-版本选择：为什么是-Humble？" class="headerlink" title="1. 版本选择：为什么是 Humble？"></a>1. 版本选择：为什么是 Humble？</h3><p>ROS 2 有很多版本（如 Foxy, Galactic, Humble, Iron, Rolling），但对于新手，我强烈建议且仅建议选择 <strong>ROS 2 Humble Hawksbill</strong>。</p>
+<ul>
+<li><strong>LTS (Long Term Support)：</strong> 它是长期支持版，支持将持续到 2027 年。这意味着你遇到的绝大多数 Bug 别人都遇到过，绝大多数第三方库都已适配。</li>
+<li><strong>稳定性：</strong> 它是目前社区公认最成熟的 ROS 2 版本，就像 Windows 10 之于 Windows 系统，是“最稳”的选择。</li>
+</ul>
+<h3 id="2-系统要求：Ubuntu-22-04-是标准答案"><a href="#2-系统要求：Ubuntu-22-04-是标准答案" class="headerlink" title="2. 系统要求：Ubuntu 22.04 是标准答案"></a>2. 系统要求：Ubuntu 22.04 是标准答案</h3><p>ROS 2 与 Ubuntu 版本是严格绑定的。Humble 对应的“官方指定生境”是 **Ubuntu 22.04 (Jammy Jellyfish)**。</p>
+<ul>
+<li><strong>物理机安装：</strong> 如果你有闲置硬件，这是性能最好的选择。</li>
+<li><strong>虚拟机安装：</strong> 推荐使用 VMware（Windows 用户）或 Parallels Desktop（Mac 用户）。请确保给虚拟机分配至少 4GB 内存和 2 个核心，否则编译代码时会卡到怀疑人生。</li>
+</ul>
+<h3 id="3-安装步骤：背后的逻辑是什么？"><a href="#3-安装步骤：背后的逻辑是什么？" class="headerlink" title="3. 安装步骤：背后的逻辑是什么？"></a>3. 安装步骤：背后的逻辑是什么？</h3><p>安装过程并不只是复制粘贴代码，理解这三步能让你对 Linux 系统有更深的理解：</p>
+<ul>
+<li><p><strong>第一步：设置编码 (Locale) 与 软件源</strong></p>
+<p>  ROS 2 运行需要支持 UTF-8 的环境。如果编码不对，终端可能会出现莫名其妙的乱码。同时，我们需要把 ROS 2 的官方服务器地址添加到系统的“信任清单”里，这样 <code>apt</code> 才能找到这些安装包。</p>
+</li>
+<li><p><strong>第二步：安装核心组件</strong></p>
+<p>  建议新手直接执行：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install ros-humble-desktop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  这里的 <code>desktop</code> 版本包含了：核心通讯库、可视化工具（RViz&#x2F;RQt）以及演示示例。虽然体积大一点，但它能保证你后续实验时不会缺东少西。</p>
+</li>
+<li><p><strong>第三步：环境变量配置——最关键的一步</strong></p>
+<p>  这是新手最容易出错的地方。安装完 ROS 2 后，系统并不会默认识别 <code>ros2</code> 这个命令。你需要告诉终端去哪里找它。</p>
+<p>  <strong>本质操作：</strong> 执行 <code>source /opt/ros/humble/setup.bash</code>。</p>
+<p>  <strong>自动化：</strong> 为了不用每次打开终端都敲一遍，我们要把这行命令写进 <code>.bashrc</code> 文件（它是终端的“开机启动配置”）：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source /opt/ros/humble/setup.bash&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  <em>没有 source，就没有 ROS。如果以后发现 <code>ros2: command not found</code>，回来检查这一步。</em></p>
+</li>
+</ul>
+<h3 id="4-小贴士：不想折腾系统？试试-Docker"><a href="#4-小贴士：不想折腾系统？试试-Docker" class="headerlink" title="4. 小贴士：不想折腾系统？试试 Docker"></a>4. 小贴士：不想折腾系统？试试 Docker</h3><p>如果你不想为了 ROS 2 专门装个 Ubuntu 22.04，或者怕把系统搞乱，<strong>Docker</strong> 是你的救星。</p>
+<ul>
+<li>你可以把它想象成一个“开箱即用”的集装箱。只需一行命令：<code>docker pull osrf/ros:humble-desktop</code></li>
+<li>你就能在一个隔离的环境里拥有完整的 ROS 2。这对于快速验证想法非常有用，但在处理复杂的图形化界面（如 RViz）时，可能需要额外配置显示转发。</li>
+</ul>
+<hr>
+<p><strong>扫清了环境的障碍，我们现在已经站在了机器人世界的门口。下一节，我们将进入 ROS 2 的“灵魂深处”，去拆解那些看起来很高大上的核心概念。</strong></p>
+<h2 id="第二部分：核心概念的“通俗化”理解"><a href="#第二部分：核心概念的“通俗化”理解" class="headerlink" title="第二部分：核心概念的“通俗化”理解"></a>第二部分：核心概念的“通俗化”理解</h2><p>在写代码之前，如果直接去啃官方文档，你可能会被“节点”、“通信中间件”、“QoS”等词汇绕晕。其实，ROS 2 的设计逻辑非常符合直觉。我们可以把一台复杂的机器人，比作一个<strong>高效运行的现代化公司</strong>。</p>
+<h3 id="1-工作空间-Workspace-与-功能包-Package-：项目的“行政划分”"><a href="#1-工作空间-Workspace-与-功能包-Package-：项目的“行政划分”" class="headerlink" title="1. 工作空间 (Workspace) 与 功能包 (Package)：项目的“行政划分”"></a>1. 工作空间 (Workspace) 与 功能包 (Package)：项目的“行政划分”</h3><ul>
+<li><strong>工作空间</strong>就像是你的<strong>办公大楼</strong>。它是你所有工作的顶层目录。在 ROS 2 中，我们通常会建立一个 <code>ros2_ws</code>。</li>
+<li><strong>功能包</strong>则是大楼里的<strong>各个部门</strong>。你不会把财务、技术、行政都混在一起，同理，你也不会把“雷达驱动”和“路径规划”写在一个文件夹里。<ul>
+<li><strong>本质：</strong> 这种划分是为了“解耦”。以后你写好了某个牛逼的算法包，可以直接“入驻”到别人的办公大楼里去。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-节点-Node-：机器人的“器官”与“员工”"><a href="#2-节点-Node-：机器人的“器官”与“员工”" class="headerlink" title="2. 节点 (Node)：机器人的“器官”与“员工”"></a>2. 节点 (Node)：机器人的“器官”与“员工”</h3><p>这是 ROS 2 最核心的单位。如果把机器人比作人体，那么：</p>
+<ul>
+<li><strong>相机节点</strong>就是“眼睛”，专门负责采样视觉信息；</li>
+<li><strong>驱动控制节点</strong>就是“小脑”，专门控制马达转动；</li>
+<li><strong>建图节点</strong>就是“大脑记忆区”，负责整合地图。</li>
+</ul>
+<p><strong>本质：</strong> 每一个节点都是一个<strong>独立的进程</strong>。这正是 ROS 2 强大的原因——如果“眼睛”坏了（进程崩溃），“小脑”依然可以控制双腿站立，而不会导致整台机器人瞬间瘫痪。</p>
+<h3 id="3-话题-Topic-与-消息-Message-：无处不在的“广播站”"><a href="#3-话题-Topic-与-消息-Message-：无处不在的“广播站”" class="headerlink" title="3. 话题 (Topic) 与 消息 (Message)：无处不在的“广播站”"></a>3. 话题 (Topic) 与 消息 (Message)：无处不在的“广播站”</h3><p>节点之间是如何沟通的？最常用的方式就是“话题”。</p>
+<ul>
+<li><strong>话题 (Topic)：</strong> 就像一个<strong>广播电台</strong>。比如雷达节点一直在 FM 98.6 频道播报“前方 1 米有障碍物”。</li>
+<li><strong>消息 (Message)：</strong> 则是<strong>播报的格式</strong>。电台必须按照约定的标准（如：距离用浮点数，单位用米）来播报，听众才能听懂。</li>
+<li><strong>特点：</strong> 这是一种<strong>单向、多对多</strong>的异步通信。雷达节点只管发，它不关心谁在听；避障节点只要订阅了（Subscribe）这个频道，就能收到数据。</li>
+</ul>
+<h3 id="4-服务-Service-：精准的“一问一答”"><a href="#4-服务-Service-：精准的“一问一答”" class="headerlink" title="4. 服务 (Service)：精准的“一问一答”"></a>4. 服务 (Service)：精准的“一问一答”</h3><p>有时候，广播电台这种模式就不太合适了。比如你想让机器人“拍一张照片”，你不需要它每秒广播 30 次照片，你只需要在需要的时候下达指令。</p>
+<ul>
+<li><strong>本质：</strong> 就像<strong>给前台打电话</strong>。你提出请求（Request），前台处理完后给你一个回复（Response）。</li>
+<li><strong>特点：</strong> 这是一种<strong>双向、同步</strong>的通信。没收到回复前，发送者通常会等待。</li>
+</ul>
+<h3 id="5-动作-Action-：带进度的“长期任务”"><a href="#5-动作-Action-：带进度的“长期任务”" class="headerlink" title="5. 动作 (Action)：带进度的“长期任务”"></a>5. 动作 (Action)：带进度的“长期任务”</h3><p>如果任务很耗时怎么办？比如“让机器人导航到 100 米外的厨房”。</p>
+<ul>
+<li>用“服务”的话，由于耗时太长，调用者会一直卡在那里等结果，用户体验极差。</li>
+<li><strong>动作 (Action)</strong> 专门解决这个问题。它包含三部分：<ol>
+<li><strong>目标 (Goal)：</strong> “去厨房”。</li>
+<li><strong>反馈 (Feedback)：</strong> 导航过程中不断汇报“我已走了 10 米”、“20 米”……</li>
+<li><strong>结果 (Result)：</strong> “我到了”或“路被堵住了，去不了”。</li>
+</ol>
+</li>
+<li><strong>特点：</strong> 它允许你中途取消任务，非常人性化。</li>
+</ul>
+<hr>
+<h3 id="总结：ROS-2-的本质"><a href="#总结：ROS-2-的本质" class="headerlink" title="总结：ROS 2 的本质"></a>总结：ROS 2 的本质</h3><p>通过这些概念的组合，ROS 2 把复杂的机器人开发拆解成了<strong>一个个独立小模块（Node）</strong>，以及<strong>一套标准化的对话协议（Topic&#x2F;Service&#x2F;Action）</strong>。</p>
+<p>你不再是在写一个“巨大的程序”，而是在构建一个“分工明确的系统”。理解了这一点，你就已经跨过了 ROS 2 最难的那道思维门槛。接下来，我们将动手写出我们的第一个“员工”——Hello World 节点。</p>
+<h2 id="第三部分：动手实践——Hello-World"><a href="#第三部分：动手实践——Hello-World" class="headerlink" title="第三部分：动手实践——Hello World"></a>第三部分：动手实践——Hello World</h2><p>理论听罢，终须过手。我们将亲手建立一个简单的“发布者”节点。它的任务非常单纯：每隔一秒，向世界大声喊出一句“Hello ROS 2”。</p>
+<h3 id="1-第一步：建立你的“根据地”-Workspace"><a href="#1-第一步：建立你的“根据地”-Workspace" class="headerlink" title="1. 第一步：建立你的“根据地” (Workspace)"></a>1. 第一步：建立你的“根据地” (Workspace)</h3><p>在 ROS 2 中，所有的开发工作都必须在一个叫“工作空间”的文件夹下进行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建文件夹结构</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/ros2_ws/src</span><br><span class="line"><span class="comment"># 进入工作目录</span></span><br><span class="line"><span class="built_in">cd</span> ~/ros2_ws/src</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>直击本质：</strong> <code>src</code> 文件夹是存放所有源代码的地方。所有的编译指令都要在 <code>~/ros2_ws</code> 这一层执行。</li>
+</ul>
+<h3 id="2-第二步：创建功能包-Package"><a href="#2-第二步：创建功能包-Package" class="headerlink" title="2. 第二步：创建功能包 (Package)"></a>2. 第二步：创建功能包 (Package)</h3><p>我们不能直接写脚本，得先给脚本办个“身份证”（功能包）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ros2 pkg create --build-type ament_python --node-name hello_node my_first_pkg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>参数拆解：</strong><ul>
+<li><code>-build-type ament_python</code>：告诉系统我们要用 Python 开发。</li>
+<li><code>-node-name hello_node</code>：自动帮我们生成一个名为 <code>hello_node</code> 的模板文件。</li>
+<li><code>my_first_pkg</code>：这就是我们部门（包）的名字。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-第三步：编写第一个节点"><a href="#3-第三步：编写第一个节点" class="headerlink" title="3. 第三步：编写第一个节点"></a>3. 第三步：编写第一个节点</h3><p>现在，进入 <code>~/ros2_ws/src/my_first_pkg/my_first_pkg/hello_node.py</code>。你会看到一些模板代码，让我们把它修改成一个标准的 ROS 2 节点：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> rclpy</span><br><span class="line"><span class="keyword">from</span> rclpy.node <span class="keyword">import</span> Node</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyHelloNode</span>(<span class="title class_ inherited__">Node</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 初始化节点名称</span></span><br><span class="line">        <span class="built_in">super</span>().__init__(<span class="string">&#x27;hello_node&#x27;</span>)</span><br><span class="line">        <span class="comment"># 创建一个定时器，每 1.0 秒执行一次回调函数</span></span><br><span class="line">        <span class="variable language_">self</span>.timer = <span class="variable language_">self</span>.create_timer(<span class="number">1.0</span>, <span class="variable language_">self</span>.timer_callback)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">timer_callback</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># ROS 2 的标准日志输出，会在终端打印信息</span></span><br><span class="line">        <span class="variable language_">self</span>.get_logger().info(<span class="string">&#x27;Hello ROS 2, 我是你的第一个节点！&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">args=<span class="literal">None</span></span>):</span><br><span class="line">    rclpy.init(args=args)     <span class="comment"># 初始化 ROS 2 通讯</span></span><br><span class="line">    node = MyHelloNode()      <span class="comment"># 实例化节点</span></span><br><span class="line">    rclpy.spin(node)          <span class="comment"># 循环运行，等待定时器触发</span></span><br><span class="line">    node.destroy_node()       <span class="comment"># 销毁节点</span></span><br><span class="line">    rclpy.shutdown()          <span class="comment"># 关闭通讯</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>代码本质：</strong> 我们定义了一个类 <code>MyHelloNode</code>。它的心脏是 <code>timer</code>，每秒跳动一次，跳动时就执行 <code>timer_callback</code>。</li>
+</ul>
+<h3 id="4-第四步：编译与运行（见证奇迹）"><a href="#4-第四步：编译与运行（见证奇迹）" class="headerlink" title="4. 第四步：编译与运行（见证奇迹）"></a>4. 第四步：编译与运行（见证奇迹）</h3><p>在 ROS 2 中，代码写完不能直接跑，必须经过“编译”和“环境刷新”。</p>
+<p><strong>1. 编译 (Build)：</strong></p>
+<p>回到工作空间的根目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/ros2_ws</span><br><span class="line">colcon build</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>执行完后，你会发现多出了 <code>build</code>、<code>install</code>、<code>log</code> 三个文件夹。你的可执行文件现在就躺在 <code>install</code> 文件夹里。</p>
+<p><strong>2. 刷新环境 (Source)：</strong></p>
+<p>这是最关键的“玄学”步骤。虽然你安装了 ROS 2，但<strong>当前的终端窗口</strong>还不知道你刚刚新建了一个包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> install/setup.bash</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><em>注意：每次你修改了代码并重新 build 之后，或者新开一个窗口，都要执行这一句。</em></p>
+<p><strong>3. 运行：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ros2 run my_first_pkg hello_node</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>当你看到终端每秒跳出一行 <code>[INFO]: Hello ROS 2...</code> 时，恭喜你，你已经正式跨过了机器人开发的门槛！</strong></p>
+<hr>
+<h3 id="避坑小贴士："><a href="#避坑小贴士：" class="headerlink" title="避坑小贴士："></a>避坑小贴士：</h3><ul>
+<li><strong>为什么报错 <code>ModuleNotFoundError</code>？</strong>通常是因为你在 <code>colcon build</code> 之后忘了 <code>source install/setup.bash</code>。</li>
+<li><strong>Python 权限问题：</strong>确保你的 <code>.py</code> 文件具有执行权限，虽然 <code>ros2 run</code> 会帮你处理大部分情况，但手动执行 <code>chmod +x &lt;文件名&gt;</code> 永远是个好习惯。</li>
+</ul>
+<p><strong>现在，你的第一个“员工”已经开始工作了。在下一部分，我们将学习如何使用可视化工具，去“偷窥”这个员工的工作状态。</strong></p>
+<h2 id="第四部分：可视化工具——新手的“眼睛”"><a href="#第四部分：可视化工具——新手的“眼睛”" class="headerlink" title="第四部分：可视化工具——新手的“眼睛”"></a>第四部分：可视化工具——新手的“眼睛”</h2><p>在机器人开发中，最痛苦的事情莫过于“盲操作”。代码跑起来了，但你看不到数据在如何流动。ROS 2 提供了一套强大的工具链，它们就像是你的“X光机”和“全息投影仪”，让看不见的通讯变得直观可见。</p>
+<h3 id="1-RQt-与-rqt-graph：查看“社交网络”"><a href="#1-RQt-与-rqt-graph：查看“社交网络”" class="headerlink" title="1. RQt 与 rqt_graph：查看“社交网络”"></a>1. RQt 与 <code>rqt_graph</code>：查看“社交网络”</h3><p>当你运行了三四个节点，它们之间通过各种话题互相传递数据时，你可能会变糊涂：到底谁在给谁发消息？</p>
+<p>这时候，请打开一个新终端，输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rqt_graph</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>它是什么：</strong> 一个自动生成的节点关系图。</li>
+<li><strong>直击本质：</strong> 每一个圆圈代表一个**节点 (Node)<strong>，每一条线代表一个</strong>话题 (Topic)**。</li>
+<li><strong>新手妙用：</strong> 如果你的程序没反应，先看一眼 <code>rqt_graph</code>。如果你发现本该相连的两个节点之间没有连线，那一定是话题名称写错了。</li>
+</ul>
+<h3 id="2-RViz2：机器人的“全息显示器”"><a href="#2-RViz2：机器人的“全息显示器”" class="headerlink" title="2. RViz2：机器人的“全息显示器”"></a>2. RViz2：机器人的“全息显示器”</h3><p>如果你在处理激光雷达、摄像头或者机器人的 3D 模型，光看终端跳动的数字（坐标、距离）是会疯掉的。你需要 **RViz2 (ROS Visualization)**。</p>
+<p>输入命令即可启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rviz2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>它是什么：</strong> 一个 3D 可视化平台。它不产生数据，只负责“翻译”数据。</li>
+<li><strong>直击本质：</strong> 它把复杂的数学向量变成了你一眼就能看懂的箭头、点云和 3D 模型。</li>
+<li><strong>场景举例：</strong> 机器人觉得前面有一堵墙，RViz2 就会在对应的坐标画出一排红点。如果红点的位置不对，你就知道是传感器标定出了问题。</li>
+</ul>
+<h3 id="3-ROS-2-命令行工具：你的“瑞士军刀”"><a href="#3-ROS-2-命令行工具：你的“瑞士军刀”" class="headerlink" title="3. ROS 2 命令行工具：你的“瑞士军刀”"></a>3. ROS 2 命令行工具：你的“瑞士军刀”</h3><p>有时候你不需要图形界面，只想快速在终端检查一下系统的状态。这时候 <code>ros2</code> 家族的命令就派上用场了：</p>
+<ul>
+<li>**<code>ros2 node list</code>**：看看当前有哪些“员工”（节点）在岗。</li>
+<li>**<code>ros2 topic list</code>**：看看空气中漂浮着哪些“电台频道”（话题）。</li>
+<li>**<code>ros2 topic echo /chatter</code>**：最常用的命令！直接把某个话题的内容打印在屏幕上。这就像是“监听”某个频道，看看里面到底发的是不是预期的内容。</li>
+<li>**<code>ros2 topic info /chatter</code>**：查看这个话题的数据类型是什么，以及有几个订阅者。</li>
+</ul>
+<h3 id="总结：工具的意义"><a href="#总结：工具的意义" class="headerlink" title="总结：工具的意义"></a>总结：工具的意义</h3><p>新手往往会沉迷于写代码，而忽略了工具的使用。请记住：<strong>在 ROS 2 中，会看数据比会写代码更重要。</strong></p>
+<p>当你的机器人没有按照预期移动时，先别急着改代码，先用 <code>ros2 topic echo</code> 看看指令发出去没有，再用 <code>rqt_graph</code> 看看连接断了没有，最后用 <code>rviz2</code> 看看机器人眼里的世界是否真实。这些工具，就是你作为机器人工程师的“感官延伸”。</p>
+<hr>
+<p><strong>掌握了这些“眼睛”，你已经不再是盲目摸索。在最后一部分，我们将总结一些新手最容易掉进去的坑，帮你平稳度过“新手期”。</strong></p>
+<h2 id="第五部分：新手常踩的那些坑"><a href="#第五部分：新手常踩的那些坑" class="headerlink" title="第五部分：新手常踩的那些坑"></a>第五部分：新手常踩的那些坑</h2><p>在 ROS 2 的学习曲线上，有些坑是几乎每个人都会踩进去的。为了不让你的热情被这些琐碎的报错消磨殆尽，我为你整理了这份“避坑指南”。</p>
+<h3 id="1-“为什么又提示找不到命令？”——环境变量的魔咒"><a href="#1-“为什么又提示找不到命令？”——环境变量的魔咒" class="headerlink" title="1. “为什么又提示找不到命令？”——环境变量的魔咒"></a>1. “为什么又提示找不到命令？”——环境变量的魔咒</h3><p>这是新手反馈率 90% 的问题。</p>
+<ul>
+<li><strong>现象：</strong> 你明明刚装好 ROS 2，或者刚写好代码，新开一个终端输入 <code>ros2</code> 或运行你的节点，系统却冷冷地回一句 <code>command not found</code> 或 <code>Package not found</code>。</li>
+<li><strong>真相：</strong> ROS 2 的环境变量是<strong>终端隔离</strong>的。</li>
+<li><strong>对策：</strong><ul>
+<li>记住：<strong>每一个新打开的终端窗口，都是一张白纸。</strong></li>
+<li>如果你运行的是系统自带工具，需要 <code>source /opt/ros/humble/setup.bash</code>。</li>
+<li>如果你运行的是你自己写的代码，需要进入工作空间执行 <code>source install/setup.bash</code>。</li>
+<li><strong>进阶技巧：</strong> 把这两行 source 命令写进你的 <code>~.bashrc</code> 文件，让它随终端启动自动加载。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-“谁在控制我的机器人？”——网络通讯的干扰"><a href="#2-“谁在控制我的机器人？”——网络通讯的干扰" class="headerlink" title="2. “谁在控制我的机器人？”——网络通讯的干扰"></a>2. “谁在控制我的机器人？”——网络通讯的干扰</h3><p>ROS 2 基于 DDS 通讯，这意味着只要在同一个局域网内，大家的节点默认是可以互相“听见”的。</p>
+<ul>
+<li><p><strong>现象：</strong> 在实验室或办公室，你发现你的 <code>rqt_graph</code> 里出现了一堆不属于你的节点，甚至别人的指令控制了你的小车。</p>
+</li>
+<li><p><strong>真相：</strong> 你们都在默认的 <code>DOMAIN ID</code>（通常是 0）里“大喊大叫”。</p>
+</li>
+<li><p><strong>对策：</strong> 给你自己的机器人设个“包厢号”。在 <code>.bashrc</code> 里加上：<br>只要你和室友的 ID 不同，你们的世界就会彻底清静。</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ROS_DOMAIN_ID=某个0-232之间的数字</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-“编译报错缺东西？”——不要漏掉-rosdep"><a href="#3-“编译报错缺东西？”——不要漏掉-rosdep" class="headerlink" title="3. “编译报错缺东西？”——不要漏掉 rosdep"></a>3. “编译报错缺东西？”——不要漏掉 rosdep</h3><p>从 GitHub 上下载了一个大神的开源包，一运行 <code>colcon build</code> 满屏红字报错，提示缺少各种库。</p>
+<ul>
+<li><p><strong>对策：</strong> 养成使用 <code>rosdep</code> 的习惯。它是 ROS 2 的“自动管家”，能自动扫描项目依赖并帮你一键安装。<br>这一行命令能帮你省去手动安装几十个库的麻烦。</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在工作空间根目录执行</span></span><br><span class="line">rosdep install -i --from-path src --rosdistro humble -y</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="4-编程语言的纠结：Python-还是-C-？"><a href="#4-编程语言的纠结：Python-还是-C-？" class="headerlink" title="4. 编程语言的纠结：Python 还是 C++？"></a>4. 编程语言的纠结：Python 还是 C++？</h3><p>很多新手会问：我是不是必须精通 C++ 才能学 ROS 2？</p>
+<ul>
+<li><strong>真相：</strong><ul>
+<li><strong>Python：</strong> 适合新手入门、快速原型开发、编写逻辑脚本和视觉算法。它开发效率极高，报错易读。</li>
+<li><strong>C++：</strong> 适合底层驱动、高频实时控制（如电机驱动、激光雷达处理）。它的运行效率极高，但指针和内存管理对新手不友好。</li>
+</ul>
+</li>
+<li><strong>建议：</strong> <strong>先用 Python 跑通逻辑，再用 C++ 优化性能。</strong> 在 ROS 2 中，Python 节点和 C++ 节点是可以完美无缝通讯的。不要在语言上死磕，先让机器人动起来才是王道。</li>
+</ul>
+<hr>
+<h3 id="结语：接下来的路"><a href="#结语：接下来的路" class="headerlink" title="结语：接下来的路"></a>结语：接下来的路</h3><p>恭喜你！如果你完整读到了这里，你已经成功跨过了 ROS 2 最折磨人的起步阶段。</p>
+<p>从“为什么选 ROS 2”的宏观理解，到环境搭建的脚踏实地，再到 Hello World 的亲手实践，你已经掌握了机器人开发的底层思维。你会发现，ROS 2 并不只是一个软件工具，它是一套<strong>关于如何拆解复杂系统的方法论</strong>。</p>
+<p><strong>下一步建议：</strong></p>
+<ol>
+<li>去 <strong>Gazebo</strong> 仿真环境里搭建一个虚拟机器人，不用花钱买硬件也能练手。</li>
+<li>尝试让你的节点不再只发“Hello”，而是尝试订阅一个真实的（或仿真的）传感器数据。</li>
+<li>保持好奇心，多翻阅官方文档，但也别忘了在社区里向大牛请教。</li>
+</ol>
+<p>机器人开发的世界很大，ROS 2 是你手中最锋利的刀。带上它，去构建属于你的“变形金刚”吧！</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>你好，机器人！ROS 2 快速上手：从安装到第一个 Node</p><p><a href="https://yiluqingtai.github.io/2025/12/20/你好，机器人！ROS-2-快速上手：从安装到第一个-Node/">https://yiluqingtai.github.io/2025/12/20/你好，机器人！ROS-2-快速上手：从安装到第一个-Node/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>yiluqingtai</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-12-20</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/ROS-2/">ROS 2</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%BC%80%E5%8F%91/">机器人开发</a><a class="link-muted mr-2" rel="tag" href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/12/21/AI-%E8%B5%8B%E8%83%BD%E4%B8%8B%E7%9A%84%E4%B8%AA%E4%BA%BA%E6%95%B0%E5%AD%97%E5%9B%BE%E4%B9%A6%E9%A6%86%EF%BC%9A%E4%BB%8E%E5%85%AC%E4%BC%97%E5%8F%B7%E6%89%B9%E9%87%8F%E6%8A%93%E5%8F%96%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E7%B2%BE%E8%A3%85-PDF-%E7%94%B5%E5%AD%90%E4%B9%A6%E7%9A%84%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E8%B7%B5/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">AI 赋能下的个人数字图书馆：从公众号批量抓取到工业级精装 PDF 电子书的全自动化实践</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/12/20/Hexo-%E8%BF%9B%E9%98%B6%EF%BC%9A%E6%89%93%E9%80%A0%E6%9E%81%E8%87%B4%E8%87%AA%E5%8A%A8%E5%8C%96%E4%B8%8E-AI-%E8%B5%8B%E8%83%BD%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"><span class="level-item">Hexo 进阶：打造极致自动化与 AI 赋能的技术博客</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="yiluqingtai"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">yiluqingtai</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives/"><p class="title">36</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories/"><p class="title">12</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags/"><p class="title">78</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/yiluqingtai" target="_blank" rel="me noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Github" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#引言：为什么是-ROS-2？"><span class="level-left"><span class="level-item">引言：为什么是 ROS 2？</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-机器人时代的“安卓”：从孤岛到生态"><span class="level-left"><span class="level-item">1. 机器人时代的“安卓”：从孤岛到生态</span></span></a></li><li><a class="level is-mobile" href="#2-ROS-1-vs-ROS-2：从实验室走向星辰大海"><span class="level-left"><span class="level-item">2. ROS 1 vs ROS 2：从实验室走向星辰大海</span></span></a></li><li><a class="level is-mobile" href="#3-我们的目标：打破“入门即放弃”的魔咒"><span class="level-left"><span class="level-item">3. 我们的目标：打破“入门即放弃”的魔咒</span></span></a></li></ul></li><li><a class="level is-mobile" href="#第一部分：环境准备（扫清障碍）"><span class="level-left"><span class="level-item">第一部分：环境准备（扫清障碍）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-版本选择：为什么是-Humble？"><span class="level-left"><span class="level-item">1. 版本选择：为什么是 Humble？</span></span></a></li><li><a class="level is-mobile" href="#2-系统要求：Ubuntu-22-04-是标准答案"><span class="level-left"><span class="level-item">2. 系统要求：Ubuntu 22.04 是标准答案</span></span></a></li><li><a class="level is-mobile" href="#3-安装步骤：背后的逻辑是什么？"><span class="level-left"><span class="level-item">3. 安装步骤：背后的逻辑是什么？</span></span></a></li><li><a class="level is-mobile" href="#4-小贴士：不想折腾系统？试试-Docker"><span class="level-left"><span class="level-item">4. 小贴士：不想折腾系统？试试 Docker</span></span></a></li></ul></li><li><a class="level is-mobile" href="#第二部分：核心概念的“通俗化”理解"><span class="level-left"><span class="level-item">第二部分：核心概念的“通俗化”理解</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-工作空间-Workspace-与-功能包-Package-：项目的“行政划分”"><span class="level-left"><span class="level-item">1. 工作空间 (Workspace) 与 功能包 (Package)：项目的“行政划分”</span></span></a></li><li><a class="level is-mobile" href="#2-节点-Node-：机器人的“器官”与“员工”"><span class="level-left"><span class="level-item">2. 节点 (Node)：机器人的“器官”与“员工”</span></span></a></li><li><a class="level is-mobile" href="#3-话题-Topic-与-消息-Message-：无处不在的“广播站”"><span class="level-left"><span class="level-item">3. 话题 (Topic) 与 消息 (Message)：无处不在的“广播站”</span></span></a></li><li><a class="level is-mobile" href="#4-服务-Service-：精准的“一问一答”"><span class="level-left"><span class="level-item">4. 服务 (Service)：精准的“一问一答”</span></span></a></li><li><a class="level is-mobile" href="#5-动作-Action-：带进度的“长期任务”"><span class="level-left"><span class="level-item">5. 动作 (Action)：带进度的“长期任务”</span></span></a></li><li><a class="level is-mobile" href="#总结：ROS-2-的本质"><span class="level-left"><span class="level-item">总结：ROS 2 的本质</span></span></a></li></ul></li><li><a class="level is-mobile" href="#第三部分：动手实践——Hello-World"><span class="level-left"><span class="level-item">第三部分：动手实践——Hello World</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-第一步：建立你的“根据地”-Workspace"><span class="level-left"><span class="level-item">1. 第一步：建立你的“根据地” (Workspace)</span></span></a></li><li><a class="level is-mobile" href="#2-第二步：创建功能包-Package"><span class="level-left"><span class="level-item">2. 第二步：创建功能包 (Package)</span></span></a></li><li><a class="level is-mobile" href="#3-第三步：编写第一个节点"><span class="level-left"><span class="level-item">3. 第三步：编写第一个节点</span></span></a></li><li><a class="level is-mobile" href="#4-第四步：编译与运行（见证奇迹）"><span class="level-left"><span class="level-item">4. 第四步：编译与运行（见证奇迹）</span></span></a></li><li><a class="level is-mobile" href="#避坑小贴士："><span class="level-left"><span class="level-item">避坑小贴士：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#第四部分：可视化工具——新手的“眼睛”"><span class="level-left"><span class="level-item">第四部分：可视化工具——新手的“眼睛”</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-RQt-与-rqt-graph：查看“社交网络”"><span class="level-left"><span class="level-item">1. RQt 与 rqt_graph：查看“社交网络”</span></span></a></li><li><a class="level is-mobile" href="#2-RViz2：机器人的“全息显示器”"><span class="level-left"><span class="level-item">2. RViz2：机器人的“全息显示器”</span></span></a></li><li><a class="level is-mobile" href="#3-ROS-2-命令行工具：你的“瑞士军刀”"><span class="level-left"><span class="level-item">3. ROS 2 命令行工具：你的“瑞士军刀”</span></span></a></li><li><a class="level is-mobile" href="#总结：工具的意义"><span class="level-left"><span class="level-item">总结：工具的意义</span></span></a></li></ul></li><li><a class="level is-mobile" href="#第五部分：新手常踩的那些坑"><span class="level-left"><span class="level-item">第五部分：新手常踩的那些坑</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-“为什么又提示找不到命令？”——环境变量的魔咒"><span class="level-left"><span class="level-item">1. “为什么又提示找不到命令？”——环境变量的魔咒</span></span></a></li><li><a class="level is-mobile" href="#2-“谁在控制我的机器人？”——网络通讯的干扰"><span class="level-left"><span class="level-item">2. “谁在控制我的机器人？”——网络通讯的干扰</span></span></a></li><li><a class="level is-mobile" href="#3-“编译报错缺东西？”——不要漏掉-rosdep"><span class="level-left"><span class="level-item">3. “编译报错缺东西？”——不要漏掉 rosdep</span></span></a></li><li><a class="level is-mobile" href="#4-编程语言的纠结：Python-还是-C-？"><span class="level-left"><span class="level-item">4. 编程语言的纠结：Python 还是 C++？</span></span></a></li><li><a class="level is-mobile" href="#结语：接下来的路"><span class="level-left"><span class="level-item">结语：接下来的路</span></span></a></li></ul></li></ul></div></div><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Markdown/"><span class="level-start"><span class="level-item">Markdown</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="level-start"><span class="level-item">大数据</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"><span class="level-start"><span class="level-item">大模型</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/"><span class="level-start"><span class="level-item">室内绿植</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"><span class="level-start"><span class="level-item">技术教程</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E8%B5%84%E6%BA%90/"><span class="level-start"><span class="level-item">技术资源</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"><span class="level-start"><span class="level-item">生活随笔</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D/"><span class="level-start"><span class="level-item">经济金融</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%8C%B6/"><span class="level-start"><span class="level-item">茶</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/"><span class="level-start"><span class="level-item">读后感</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-11T13:15:23.000Z">2026-01-11</time></p><p class="title"><a href="/2026/01/11/%E9%83%BD%E5%B8%82%E7%BB%BF%E6%B4%B2%E5%85%BB%E6%88%90%E8%AE%B0%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AE%A9%E6%8C%BA%E6%8B%94%E7%9A%84%E8%99%8E%E7%9A%AE%E5%85%B0%E6%88%90%E4%B8%BA%E4%BD%A0%E5%AE%A4%E5%86%85%E7%9A%84%E2%80%9C%E4%BD%8E%E8%80%97%E8%83%BD%E4%BF%9D%E9%95%96%E2%80%9D%EF%BC%9F/">都市绿洲养成记：如何让挺拔的虎皮兰成为你室内的“低耗能保镖”？</a></p><p class="categories"><a href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/">室内绿植</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T14:50:26.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82-Spark%EF%BC%9A%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E3%80%81%E7%94%9F%E6%80%81%E5%8D%8F%E5%90%8C%E4%B8%8E%E4%BC%81%E4%B8%9A%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B/">一文搞懂 Spark：核心原理、生态协同与企业实战选型</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T01:46:34.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E3%80%90%E6%95%B0%E6%8D%AE%E6%B1%9F%E6%B9%96%E5%85%B5%E5%99%A8%E8%B0%B1%E3%80%91%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E7%9A%84%E2%80%9C%E8%A7%92%E8%89%B2%E2%80%9D%E4%B8%8E%E2%80%9C%E5%86%85%E5%8A%9F%E2%80%9D-Kafka-Spark-Hive-Flink-ClickHouse/">【数据江湖兵器谱】一文读懂主流大数据工具的“角色”与“内功” (Kafka/Spark/Hive/Flink/ClickHouse)</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-07T15:29:11.000Z">2026-01-07</time></p><p class="title"><a href="/2026/01/07/AI-%E6%B5%AA%E6%BD%AE%E4%B8%8B%EF%BC%8C%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E2%80%9C%E4%B8%8A%E8%BD%A6%E2%80%9D%EF%BC%9F%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B0%B1%E4%B8%9A%E7%9A%84-6-%E5%A4%A7%E7%BB%86%E5%88%86%E6%96%B9%E5%90%91%E5%85%A8%E8%A7%A3%E6%9E%90/">AI 浪潮下，普通程序员如何“上车”？大模型就业的 6 大细分方向全解析</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-06T01:24:41.000Z">2026-01-06</time></p><p class="title"><a href="/2026/01/06/%E7%BB%99%E6%96%B0%E6%89%8B%E7%9A%84%E8%8C%B6%E5%8F%B6%E9%80%9A%E5%85%B3%E6%89%8B%E5%86%8C%EF%BC%9A%E4%BB%8E%E2%80%9C%E7%BB%BF%E8%8C%B6%E5%B0%8F%E7%99%BD%E2%80%9D%E5%88%B0%E2%80%9C%E5%93%81%E8%8C%97%E9%AB%98%E6%89%8B%E2%80%9D%E5%8F%AA%E9%9C%80%E8%BF%99%E4%B8%80%E7%AF%87/">给新手的茶叶通关手册：从“绿茶小白”到“品茗高手”只需这一篇</a></p><p class="categories"><a href="/categories/%E8%8C%B6/">茶</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2026 yiluqingtai</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script><!-- hexo injector body_end start -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script>
+    (function() {
+        const mermaidKeywords = ['graph ', 'sequenceDiagram', 'gantt', 'classDiagram', 'stateDiagram', 'pie', 'erDiagram', 'journey'];
+
+        function renderMermaid() {
+            if (!window.mermaid) return;
+
+            // 扫描所有的 highlight 代码块
+            const blocks = document.querySelectorAll('.highlight');
+            
+            blocks.forEach(block => {
+                const codeElement = block.querySelector('.code');
+                if (!codeElement) return;
+                
+                const rawCode = codeElement.innerText.trim();
+                
+                // 检查开头是否符合 Mermaid 语法
+                const isMermaid = mermaidKeywords.some(kw => rawCode.startsWith(kw));
+                
+                if (isMermaid) {
+                    const container = document.createElement('div');
+                    container.className = 'mermaid';
+                    container.textContent = rawCode;
+
+                    // 替换掉整个 figure 标签
+                    block.parentNode.insertBefore(container, block);
+                    block.remove();
+                }
+            });
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose',
+                flowchart: { 
+                    htmlLabels: false, // 设为 false 能极大缓解文字溢出问题
+                    useMaxWidth: true 
+                }
+            });
+            
+            mermaid.run();
+        }
+
+        window.addEventListener('load', renderMermaid);
+        document.addEventListener('pjax:success', renderMermaid);
+    })();
+    </script>
+    <!-- hexo injector body_end end --></body></html>

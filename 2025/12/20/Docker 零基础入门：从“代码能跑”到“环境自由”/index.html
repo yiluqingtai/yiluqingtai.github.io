@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Docker 零基础入门：从“代码能跑”到“环境自由” - Yiluqingtai&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="yiluqingtai"><meta name="msapplication-TileImage" content="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="yiluqingtai"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文直击程序员面临的“环境一致性”痛点，深入浅出地解析了 Docker 的核心逻辑。通过生动的比喻阐述了镜像（Image）的分层只读特性与容器（Container）的隔离运行机制，助力开发者跨越“环境地狱”，实现标准化的应用交付与部署。"><meta property="og:type" content="blog"><meta property="og:title" content="Docker 零基础入门：从“代码能跑”到“环境自由”"><meta property="og:url" content="https://yiluqingtai.github.io/2025/12/20/Docker%20%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E2%80%9C%E4%BB%A3%E7%A0%81%E8%83%BD%E8%B7%91%E2%80%9D%E5%88%B0%E2%80%9C%E7%8E%AF%E5%A2%83%E8%87%AA%E7%94%B1%E2%80%9D/"><meta property="og:site_name" content="Yiluqingtai&#039;s Blog"><meta property="og:description" content="本文直击程序员面临的“环境一致性”痛点，深入浅出地解析了 Docker 的核心逻辑。通过生动的比喻阐述了镜像（Image）的分层只读特性与容器（Container）的隔离运行机制，助力开发者跨越“环境地狱”，实现标准化的应用交付与部署。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://yiluqingtai.github.io/img/og_image.png"><meta property="article:published_time" content="2025-12-20T03:20:00.000Z"><meta property="article:author" content="yiluqingtai"><meta property="article:tag" content="Docker"><meta property="article:tag" content="容器化"><meta property="article:tag" content="环境配置"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://yiluqingtai.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://yiluqingtai.github.io/2025/12/20/Docker%20%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E2%80%9C%E4%BB%A3%E7%A0%81%E8%83%BD%E8%B7%91%E2%80%9D%E5%88%B0%E2%80%9C%E7%8E%AF%E5%A2%83%E8%87%AA%E7%94%B1%E2%80%9D/"},"headline":"Docker 零基础入门：从“代码能跑”到“环境自由”","image":["https://yiluqingtai.github.io/img/og_image.png"],"datePublished":"2025-12-20T03:20:00.000Z","author":{"@type":"Person","name":"yiluqingtai"},"publisher":{"@type":"Organization","name":"Yiluqingtai's Blog","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/16957962?s=96&v=4"}},"description":"本文直击程序员面临的“环境一致性”痛点，深入浅出地解析了 Docker 的核心逻辑。通过生动的比喻阐述了镜像（Image）的分层只读特性与容器（Container）的隔离运行机制，助力开发者跨越“环境地狱”，实现标准化的应用交付与部署。"}</script><link rel="canonical" href="https://yiluqingtai.github.io/2025/12/20/Docker%20%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E2%80%9C%E4%BB%A3%E7%A0%81%E8%83%BD%E8%B7%91%E2%80%9D%E5%88%B0%E2%80%9C%E7%8E%AF%E5%A2%83%E8%87%AA%E7%94%B1%E2%80%9D/"><link rel="icon" href="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script>
+    <style>
+        /* 1. 整体容器和比例保持 */
+        .container { max-width: 1440px !important; width: 95% !important; }
+        .column.is-6-widescreen, .column.is-8-desktop, .column.is-8-tablet { flex: none !important; width: 60% !important; }
+        .column.is-3-widescreen, .column.is-4-desktop { flex: none !important; width: 20% !important; }
+
+        /* 2. 目录滚动核心修复 */
+        /* 针对 Icarus 的 TOC 挂件内部容器进行限高 */
+        .widget[data-type="toc"] .card-content, 
+        .widget.toc .card-content {
+            max-height: 70vh !important;    /* 限制为屏幕高度的 70% */
+            overflow-y: auto !important;   /* 强制开启垂直滚动 */
+            display: block !important;
+        }
+
+        /* 3. 美化目录滚动条（可选，让它更细一点） */
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar-thumb {
+            background: #dbdbdb;
+            border-radius: 10px;
+        }
+
+        /* 4. 如果侧边栏设置了 sticky: true，确保它不会把底部切掉 */
+        .column-left, .column-right {
+            align-self: flex-start; 
+            height: auto;
+        }
+    </style>
+    
+    <style>
+        /* 1. 初始隐藏，防止闪烁 */
+        .highlight.plaintext, .highlight.mermaid, .highlight.language-mermaid {
+            /* 我们稍后通过 JS 逻辑判断是否隐藏 */
+        }
+        .mermaid {
+            background: white !important;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            /* 修复文字截断的核心 */
+            line-height: 1.2 !important;
+            font-family: Arial !important;
+        }
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto;
+        }
+    </style>
+    <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-12-20T03:20:00.000Z" title="12/20/2025, 3:20:00 AM">2025-12-20</time>发表</span><span class="level-item"> yiluqingtai </span><span class="level-item"><a class="link-muted" href="/categories/Docker/">Docker</a></span><span class="level-item">1 小时读完 (大约6749个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">Docker 零基础入门：从“代码能跑”到“环境自由”</h1><div class="content"><h2 id="引言：那个困扰每个程序员的噩梦"><a href="#引言：那个困扰每个程序员的噩梦" class="headerlink" title="引言：那个困扰每个程序员的噩梦"></a>引言：那个困扰每个程序员的噩梦</h2><h3 id="1-那个困扰每个程序员的深夜噩梦"><a href="#1-那个困扰每个程序员的深夜噩梦" class="headerlink" title="1. 那个困扰每个程序员的深夜噩梦"></a>1. 那个困扰每个程序员的深夜噩梦</h3><p>想象一下：现在是周五晚上 10 点，你刚刚完成了一个新功能的开发。在你的电脑上，代码跑得完美无瑕，逻辑顺滑，测试全过。你心满意足地提交代码，准备迎接周末。</p>
+<p>半小时后，运维同事的电话像催命符一样响起：“线上崩了！报了一堆错，全是缺失库文件，你到底交了什么？”</p>
+<p>你一脸懵逼，对着屏幕喊出那句程序员圈子里流传最广、也最无力的名言：</p>
+<blockquote>
+<p>“不对啊，在我机器上明明是好的！”</p>
+</blockquote>
+<p>那一刻，你和线上服务器之间仿佛隔着一层厚厚的“结界”。你的机器是 macOS，服务器是 CentOS；你装了 Python 3.10，服务器还是 3.7；你本地的 Redis 是 6.0，服务器上却是不知哪个年代的 4.0。</p>
+<p>这种因为<strong>环境不一致</strong>导致的崩盘，就是每个程序员都避不开的“深夜噩梦”。</p>
+<h3 id="2-坠入“环境地狱”：程序员的隐形工时"><a href="#2-坠入“环境地狱”：程序员的隐形工时" class="headerlink" title="2. 坠入“环境地狱”：程序员的隐形工时"></a>2. 坠入“环境地狱”：程序员的隐形工时</h3><p>为什么配置环境这么痛苦？因为一个现代应用的运行，从来不是一个孤立的 <code>.py</code> 或 <code>.java</code> 文件，而是一整套复杂的生态系统：</p>
+<ul>
+<li><strong>操作系统及其版本</strong>（Ubuntu? Debian? Alpine?）</li>
+<li><strong>运行时环境</strong>（Java 的 JDK, Python 的解释器, Node.js 的版本）</li>
+<li><strong>各种第三方依赖库</strong>（还要考虑它们之间互相冲突的版本）</li>
+<li><strong>系统级配置</strong>（环境变量、路径设置、端口开放）</li>
+<li><strong>中间件</strong>（数据库、缓存、消息队列）</li>
+</ul>
+<p>手动配置这些东西，就像是在实验室里调配化学试剂，错一个毫升就会引起爆炸。更绝望的是，当你需要在测试环境、预发布环境和生产环境把这些过程重复三遍时，那种<strong>重复造轮子</strong>的挫败感，就是我们常说的“环境地狱”。</p>
+<h3 id="3-救星驾到：什么是-Docker？"><a href="#3-救星驾到：什么是-Docker？" class="headerlink" title="3. 救星驾到：什么是 Docker？"></a>3. 救星驾到：什么是 Docker？</h3><p>如果我告诉你，有一种技术可以把你的程序，连同它赖以生存的空气、水和土壤（即：所有的配置、依赖和系统环境），全部塞进一个 <strong>特制的、透明的“集装箱”</strong> 里呢？</p>
+<p>这就是 <strong>Docker</strong>。</p>
+<p><strong>一句话定义：</strong> Docker 是一种“容器化”技术。它允许你将应用程序及其所有依赖打包成一个标准化的单元（镜像）。</p>
+<p><strong>通俗点说：</strong></p>
+<p>以前部署程序像“搬家”，你要搬床、搬柜子、接水电，到了新地方发现尺寸还不一定对。</p>
+<p>现在部署程序像“送快递”，你直接把东西打包进一个标准规格的<strong>集装箱</strong>。无论这个集装箱是被吊车放在货轮上、卡车上还是火车上，里面的东西都原封不动，开箱即用。</p>
+<p>有了 Docker，你交付的不再只是几行代码，而是一个<strong>完整运行的“小世界”</strong>。从此，你彻底实现了“环境自由”。</p>
+<h2 id="一、-核心概念：三个词搞定-Docker"><a href="#一、-核心概念：三个词搞定-Docker" class="headerlink" title="一、 核心概念：三个词搞定 Docker"></a>一、 核心概念：三个词搞定 Docker</h2><h3 id="1-镜像-Image-——-它是“被冻结的模具”"><a href="#1-镜像-Image-——-它是“被冻结的模具”" class="headerlink" title="1. 镜像 (Image) —— 它是“被冻结的模具”"></a>1. 镜像 (Image) —— 它是“被冻结的模具”</h3><p>如果说开发环境是一个动态的战场，那么<strong>镜像</strong>就是某一个瞬间的“战场快照”。</p>
+<ul>
+<li><strong>形象理解：</strong> 它就像是一个<strong>做蛋糕的模具</strong>，或者是<strong>一张游戏光盘</strong>。模具本身不能吃，光盘本身也不能玩，但它们包含了做出蛋糕或运行游戏所需的全部指令和素材。</li>
+<li><strong>硬核干货：</strong><ul>
+<li><strong>只读性：</strong> 镜像一旦生成，就是不可变的。如果你想修改镜像，只能基于它创建一个新的镜像。</li>
+<li><strong>分层结构（Layer）：</strong> 这是 Docker 最天才的设计。镜像不是一个巨大的实心文件，而是像“千层饼”一样由多层组成。比如：底层是 Ubuntu 系统，往上一层是 Python 环境，再往上一层是你的代码。这种结构让镜像极其节省空间——如果两个镜像都用了 Ubuntu 底层，它们会共享这一层。</li>
+</ul>
+</li>
+<li><strong>直击心灵：</strong> 镜像就是你的“分身术秘籍”，只要秘籍在手，你随时随地都能变出一模一样的运行环境。</li>
+</ul>
+<h3 id="2-容器-Container-——-它是“活着的集装箱”"><a href="#2-容器-Container-——-它是“活着的集装箱”" class="headerlink" title="2. 容器 (Container) —— 它是“活着的集装箱”"></a>2. 容器 (Container) —— 它是“活着的集装箱”</h3><p>镜像运行起来之后，就变成了<strong>容器</strong>。</p>
+<ul>
+<li><strong>形象理解：</strong> 镜像如果是“菜谱”，容器就是“炒出来的那盘菜”；镜像如果是“类（Class）”，容器就是“实例（Object）”。</li>
+<li><strong>硬核干货：</strong><ul>
+<li><strong>隔离性：</strong> 每个容器都是一个独立的、安全的沙箱。你在容器 A 里删库跑路，完全不会影响到容器 B 或者宿主机系统。</li>
+<li><strong>可写层：</strong> 既然镜像是只读的，那容器运行时产生的数据（比如日志）写在哪？Docker 会在只读镜像的最顶层盖上一层薄薄的“可写层”。容器一旦销毁，这层数据也就烟消云散了（除非你使用了“数据卷”挂载）。</li>
+<li><strong>轻量化：</strong> 启动一个容器不需要像虚拟机那样加载整个系统内核，它直接复用宿主机的内核。所以，启动容器就像启动一个普通进程一样，是<strong>秒级</strong>的。</li>
+</ul>
+</li>
+<li><strong>直击心灵：</strong> 容器是镜像的“生命态”。它卑微到极点，召之即来挥之即去；它也强大到极点，能瞬间在任何地方开启一片天地。</li>
+</ul>
+<h3 id="3-仓库-Registry-——-它是“全球集装箱码头”"><a href="#3-仓库-Registry-——-它是“全球集装箱码头”" class="headerlink" title="3. 仓库 (Registry) —— 它是“全球集装箱码头”"></a>3. 仓库 (Registry) —— 它是“全球集装箱码头”</h3><p>你做好了镜像，想给同事用，或者想部署到服务器上，该怎么办？这就需要<strong>仓库</strong>。</p>
+<ul>
+<li><strong>形象理解：</strong> 它就是<strong>镜像的应用商店</strong>，或者是<strong>代码界的 GitHub</strong>。</li>
+<li><strong>硬核干货：</strong><ul>
+<li><strong>Docker Hub：</strong> 这是官方最大的公共仓库。你想装个 MySQL？<code>docker pull mysql</code>。想装个 Redis？<code>docker pull redis</code>。全世界的开发者都在往这里贡献“模具”。</li>
+<li><strong>私有仓库：</strong> 公司内部通常会搭建私有的 Registry（比如 Harbor），用来存放涉及商业机密的业务镜像。</li>
+</ul>
+</li>
+<li><strong>直击心灵：</strong> 仓库的存在，让你不再需要拷贝几 GB 的虚拟机文件。你只需要给对方一个“名字+版本号”，他就能在几秒钟内克隆出你的整个环境。</li>
+</ul>
+<hr>
+<h3 id="总结一下这三者的关系："><a href="#总结一下这三者的关系：" class="headerlink" title="总结一下这三者的关系："></a>总结一下这三者的关系：</h3><p>我们可以用一套 <strong>“开发流水线”</strong> 来串联它们：</p>
+<ol>
+<li>你写了一份 <strong>Dockerfile</strong>（这相当于你的“造像图纸”）。</li>
+<li>通过 <code>docker build</code> 命令，你亲手打造了一个 <strong>Image（镜像）</strong>。</li>
+<li>你把这个镜像 <code>docker push</code> 到了 <strong>Registry（仓库）</strong>。</li>
+<li>你的同事或者服务器通过 <code>docker pull</code> 把镜像拉下来。</li>
+<li>最后通过 <code>docker run</code> 命令，一个活生生的 <strong>Container（容器）</strong> 就跑起来了。</li>
+</ol>
+<p><strong>底层逻辑：</strong></p>
+<ul>
+<li><strong>Image</strong> 解决了<strong>存储和分发</strong>的问题。</li>
+<li><strong>Container</strong> 解决了<strong>运行和隔离</strong>的问题。</li>
+<li><strong>Registry</strong> 解决了<strong>共享和协作</strong>的问题。</li>
+</ul>
+<h2 id="二、-快速上手：你的第一个-Docker-应用"><a href="#二、-快速上手：你的第一个-Docker-应用" class="headerlink" title="二、 快速上手：你的第一个 Docker 应用"></a>二、 快速上手：你的第一个 Docker 应用</h2><p>光说不练假把式。为了让你感受到 Docker 的“暴力美学”，我们不聊那些复杂的配置，直接用一行命令启动一个全球最流行的网页服务器——<strong>Nginx</strong>。</p>
+<p>在传统的模式下，安装 Nginx 你可能需要：更新 apt&#x2F;yum 源、处理依赖冲突、修改配置路径、启动服务守护进程……而在 Docker 的世界里，这一切只需要几秒钟。</p>
+<hr>
+<h3 id="二、-快速上手：你的第一个-Docker-应用-1"><a href="#二、-快速上手：你的第一个-Docker-应用-1" class="headerlink" title="二、 快速上手：你的第一个 Docker 应用"></a>二、 快速上手：你的第一个 Docker 应用</h3><h3 id="1-第一步：拉取镜像-——-docker-pull"><a href="#1-第一步：拉取镜像-——-docker-pull" class="headerlink" title="1. 第一步：拉取镜像 —— docker pull"></a>1. 第一步：拉取镜像 —— <code>docker pull</code></h3><p>首先，我们要从云端把 Nginx 的“模具”下载到本地。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>发生了什么？</strong> Docker 会连接到 Docker Hub（官方仓库），把 Nginx 运行所需的所有文件、库和环境变量分层下载到你的电脑里。</li>
+<li><strong>直击心灵：</strong> 这一步就像是在 App Store 点了“下载”。你不需要关心 Nginx 是怎么编译的，也不用管它依赖什么版本的系统库，Docker 已经为你打理好了一切。</li>
+</ul>
+<h3 id="2-第二步：启动容器-——-docker-run（见证奇迹的时刻）"><a href="#2-第二步：启动容器-——-docker-run（见证奇迹的时刻）" class="headerlink" title="2. 第二步：启动容器 —— docker run（见证奇迹的时刻）"></a>2. 第二步：启动容器 —— <code>docker run</code>（见证奇迹的时刻）</h3><p>有了模具，我们要把它变成一个活生生的、对外提供服务的“集装箱”。请在终端输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8080:80 --name my-web nginx</span><br></pre></td></tr></table></figure>
+
+<p>这一串命令看起来有点长，但它是 Docker 的精髓。我们把它拆解开，每个参数都是干货：</p>
+<ul>
+<li>**<code>run</code>**：Docker 最强大的命令。它的意思是：根据镜像创建一个容器，并启动它。</li>
+<li><strong><code>d</code> (Detached)<strong>：</strong>后台运行</strong>。如果不加这个参数，你的终端窗口会被 Nginx 的日志占满，关掉窗口容器就停了。加上 <code>d</code>，容器就像一个隐形的守护者，在后台默默为你工作。</li>
+<li><strong><code>p 8080:80</code> (Publish)<strong>：</strong>端口映射</strong>（极其重要！）。<ul>
+<li><strong>容器内部</strong>的 Nginx 默认监听 <strong>80</strong> 端口。</li>
+<li>但容器是隔离的，外部访问不到。</li>
+<li>这行代码的意思是：<strong>把宿主机（你的电脑）的 8080 端口，连接到容器的 80 端口。</strong></li>
+<li><em>比喻：</em> 容器就像一个带编号的房间，<code>p</code> 就像是在房间窗口和酒店大堂之间拉了一根电话线。</li>
+</ul>
+</li>
+<li>**<code>-name my-web</code>**：给你的容器起个名字。不然 Docker 会随机给它分配一个像 <code>determined_tesla</code> 这样奇奇怪怪的名字。</li>
+<li>**<code>nginx</code>**：告诉 Docker，请使用名为 <code>nginx</code> 的镜像作为模板。</li>
+</ul>
+<h3 id="3-第三步：验证结果-——-享受“环境自由”"><a href="#3-第三步：验证结果-——-享受“环境自由”" class="headerlink" title="3. 第三步：验证结果 —— 享受“环境自由”"></a>3. 第三步：验证结果 —— 享受“环境自由”</h3><p>现在，见证奇迹。打开你最喜欢的浏览器，在地址栏输入：</p>
+<blockquote>
+<p>localhost:8080</p>
+</blockquote>
+<p>当你看到屏幕上出现 <strong>“Welcome to nginx!”</strong> 那几个大字时，恭喜你！你已经成功运行了你的第一个容器应用。</p>
+<hr>
+<h3 id="💡-为什么这一步让你“直击心灵”？"><a href="#💡-为什么这一步让你“直击心灵”？" class="headerlink" title="💡 为什么这一步让你“直击心灵”？"></a>💡 为什么这一步让你“直击心灵”？</h3><p>请回想一下：</p>
+<ol>
+<li><strong>你弄乱自己的电脑了吗？</strong> 没有。你的系统路径里没有多出 Nginx 的文件，没有乱七八糟的配置文件。</li>
+<li><strong>它快吗？</strong> 除去下载时间，从输入命令到服务启动，通常不到 1 秒。</li>
+<li><strong>它好清理吗？</strong> 如果你不想玩了，只需输入 <code>docker rm -f my-web</code>，一切就会消失得干干净净，仿佛从未发生过。</li>
+</ol>
+<p><strong>这就是“环境自由”的初体验：应用被囚禁在集装箱里，而你，拥有了掌控一切的绝对权力。</strong></p>
+<hr>
+<h3 id="⚠️-小贴士（避坑指南）："><a href="#⚠️-小贴士（避坑指南）：" class="headerlink" title="⚠️ 小贴士（避坑指南）："></a>⚠️ 小贴士（避坑指南）：</h3><ul>
+<li><strong>端口冲突：</strong> 如果你的 8080 端口被占用了（比如你跑着一个 Java 项目），浏览器会报错。这时候只需要把命令改成 <code>p 9000:80</code>，然后访问 <code>localhost:9000</code> 即可。</li>
+<li><strong>镜像加速：</strong> 如果 <code>docker pull</code> 慢得让你怀疑人生，记得搜索一下“Docker 镜像加速器”（如阿里云、网易云等），那会瞬间治愈你的焦虑。</li>
+</ul>
+<h2 id="三、-实战：把你的代码“装进”集装箱"><a href="#三、-实战：把你的代码“装进”集装箱" class="headerlink" title="三、 实战：把你的代码“装进”集装箱"></a>三、 实战：把你的代码“装进”集装箱</h2><p>学会了跑别人的镜像只是“借花献佛”，真正的硬核玩家，必须学会把自己的代码打造成镜像。这一步，就是从“初级使用者”向“云原生开发者”跨越的分水岭。</p>
+<p>我们将以一个简单的 <strong>Python Web 应用</strong>为例。别担心，即使你没学过 Python，也能一眼看懂这个逻辑。</p>
+<hr>
+<h3 id="1-准备食材：你的应用代码"><a href="#1-准备食材：你的应用代码" class="headerlink" title="1. 准备食材：你的应用代码"></a>1. 准备食材：你的应用代码</h3><p>首先，在文件夹里准备一个简单的 <code>app.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.py</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello! 这是我第一个在容器里运行的应用！&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">5000</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-编写-Dockerfile：镜像的“施工蓝图”"><a href="#2-编写-Dockerfile：镜像的“施工蓝图”" class="headerlink" title="2. 编写 Dockerfile：镜像的“施工蓝图”"></a>2. 编写 Dockerfile：镜像的“施工蓝图”</h3><p>在同一个目录下，创建一个名为 <code>Dockerfile</code> 的文件（没有任何后缀）。这个文件就是告诉 Docker 如何一步步盖起你的“应用小世界”。</p>
+<p>我们将用到四个最核心的指令：</p>
+<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 选择地基：我们要一个带有 Python 3.9 环境的系统</span></span><br><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.9</span>-slim</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 设置工作目录：接下来的操作都在容器里的 /app 文件夹下进行</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 搬运工：把当前目录下的所有文件（比如 app.py）复制到容器里的 /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . .</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 安装厨具：运行命令安装 Flask 框架</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> pip install flask</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 剪彩仪式：当容器启动时，默认运行这条命令</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;python&quot;</span>, <span class="string">&quot;app.py&quot;</span>]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>💡 干货拆解：</strong></p>
+<ul>
+<li>**<code>FROM</code>**：所有镜像的起点。就像盖房子先选地块，这里我们选了官方已经精简好的 Python 环境。</li>
+<li>**<code>COPY</code>**：这是关键！它把你的本地代码“瞬间移动”到了镜像内部的虚拟空间。</li>
+<li><strong><code>RUN</code><strong>：</strong>在构建镜像时执行</strong>。它安装的软件会永远封存在镜像里，成为镜像的一部分。</li>
+<li><strong><code>CMD</code><strong>：</strong>在容器启动时执行</strong>。一个镜像里只能有一条有效，它是集装箱启动后的“第一生产力”。</li>
+</ul>
+<h3 id="3-炼金时刻：构建镜像-——-docker-build"><a href="#3-炼金时刻：构建镜像-——-docker-build" class="headerlink" title="3. 炼金时刻：构建镜像 —— docker build"></a>3. 炼金时刻：构建镜像 —— <code>docker build</code></h3><p>在终端运行以下命令，把文字版的 <code>Dockerfile</code> 变成真正的二进制镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t my-app:v1 .</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**<code>t my-app:v1</code>**：<code>t</code> 代表 Tag（标签），给你的镜像起个名字叫 <code>my-app</code>，版本号是 <code>v1</code>。</li>
+<li><strong><code>.</code> (最后那个点)<strong>：</strong>极度重要！</strong> 它告诉 Docker：“请在当前目录下寻找 Dockerfile”。很多新手会漏掉这个点。</li>
+</ul>
+<p><strong>构建过程中的直击心灵时刻：</strong></p>
+<p>你会看到终端一行行跳过构建信息。这其实是 Docker 在一层层地“叠罗汉”。如果你改了代码再次构建，Docker 会聪明地发现前两步（下载 Python 环境）没变，从而直接使用缓存。<strong>这种极速的增量构建，是 Docker 高效的秘密。</strong></p>
+<h3 id="4-终极验证：让你的应用“原地起飞”"><a href="#4-终极验证：让你的应用“原地起飞”" class="headerlink" title="4. 终极验证：让你的应用“原地起飞”"></a>4. 终极验证：让你的应用“原地起飞”</h3><p>镜像造好了，现在把它跑起来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 5000:5000 my-app:v1</span><br></pre></td></tr></table></figure>
+
+<p>打开浏览器访问 <code>localhost:5000</code>。</p>
+<p>当你看到那句 <strong>“这是我第一个在容器里运行的应用！”</strong> 时，那种“掌控感”会油然而生。</p>
+<hr>
+<h3 id="💡-这一步的价值在哪里？"><a href="#💡-这一步的价值在哪里？" class="headerlink" title="💡 这一步的价值在哪里？"></a>💡 这一步的价值在哪里？</h3><p>请意识到你刚刚完成了一件多么伟大的事情：</p>
+<ol>
+<li><strong>从此没有“环境依赖”：</strong> 无论你的电脑有没有装 Python，或者装的是 Python 2 还是 3，都不重要了。因为你的应用带着它最爱的 Python 3.9 住在集装箱里。</li>
+<li><strong>分发变得极其简单：</strong> 你只需要把这个 <code>my-app:v1</code> 镜像发给同事，或者上传到服务器，他在那边输入 <code>docker run</code>，得到的结果和你这里<strong>一模一样</strong>。</li>
+<li><strong>标准化：</strong> 你的应用不再是一个凌乱的文件夹，而是一个<strong>标准化的、可运行的对象</strong>。</li>
+</ol>
+<hr>
+<h3 id="⚠️-小贴士（深度干货）："><a href="#⚠️-小贴士（深度干货）：" class="headerlink" title="⚠️ 小贴士（深度干货）："></a>⚠️ 小贴士（深度干货）：</h3><ul>
+<li><strong>瘦身策略：</strong> 细心的你可能发现了 <code>FROM python:3.9-slim</code>。<code>slim</code> 表示这是一个“精简版”系统。在生产环境下，镜像越小，拉取速度越快，受攻击面也越小。</li>
+<li><strong>顺序很重要：</strong> Dockerfile 里的命令从上到下执行。建议把不常变动的（如安装环境）写在上面，常变动的（如复制文件）写在下面，这样能最大化利用缓存。</li>
+</ul>
+<h2 id="四、-基础命令：通关口袋书"><a href="#四、-基础命令：通关口袋书" class="headerlink" title="四、 基础命令：通关口袋书"></a>四、 基础命令：通关口袋书</h2><p>掌握了 Docker 的原理和构建流程后，你已经迈过了最高的那道槛。但在日常开发中，你并不需要每次都查阅厚厚的文档。</p>
+<p>这一章，我为你整理了一份<strong>通关口袋书</strong>。这些命令是开发者每天都要打交道的“高频词汇”，我将它们分成了四类，帮你建立起掌控容器的“上帝视角”。</p>
+<hr>
+<h3 id="1-查看类：开启“上帝视角”"><a href="#1-查看类：开启“上帝视角”" class="headerlink" title="1. 查看类：开启“上帝视角”"></a>1. 查看类：开启“上帝视角”</h3><p>想知道你的电脑里现在跑着什么，存着什么？用这两行就够了。</p>
+<ul>
+<li>**<code>docker ps</code>**：查看当前正在运行的容器。<ul>
+<li><strong>💡 干货：</strong> 加上 <code>a</code> 参数（<code>docker ps -a</code>）可以看到所有容器，包括那些已经停止运行运行的。新手最常问的“我的容器哪去了？”，通常就在 <code>a</code> 的列表里。</li>
+</ul>
+</li>
+<li>**<code>docker images</code>**：列出本地所有的镜像。<ul>
+<li><strong>💡 干货：</strong> 留意 <code>SIZE</code> 那一列，如果发现某个镜像好几个 GB，那就该考虑给它“瘦身”了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-操作类：掌握“生命周期”"><a href="#2-操作类：掌握“生命周期”" class="headerlink" title="2. 操作类：掌握“生命周期”"></a>2. 操作类：掌握“生命周期”</h3><p>容器是临时的，你可以随时让它生，随时让它死。</p>
+<ul>
+<li>**<code>docker stop &lt;ID或名字&gt;</code>**：温柔地停止一个容器。给它一点时间处理后续工作。</li>
+<li>**<code>docker start &lt;ID或名字&gt;</code>**：唤醒一个已经停止的容器。</li>
+<li>**<code>docker rm &lt;ID或名字&gt;</code>**：删除容器。<ul>
+<li><strong>💡 干货：</strong> 如果容器正在运行，你是删不掉的。你可以用 <code>docker rm -f</code> 来强制删除。</li>
+</ul>
+</li>
+<li>**<code>docker rmi &lt;镜像ID&gt;</code>**：删除镜像。<ul>
+<li><strong>注意：</strong> 只有当没有任何容器在使用这个镜像时，才能成功删除。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-探秘类：施展“穿墙术”"><a href="#3-探秘类：施展“穿墙术”" class="headerlink" title="3. 探秘类：施展“穿墙术”"></a>3. 探秘类：施展“穿墙术”</h3><p>容器像个黑盒子，如果程序出错了，或者你想进去看看文件，该怎么办？</p>
+<ul>
+<li>**<code>docker logs -f &lt;ID或名字&gt;</code>**：查看容器日志。<ul>
+<li><strong>💡 干货：</strong> 加上 <code>f</code>（follow）可以像看直播一样实时刷新日志。这是调试程序的“救命稻草”。</li>
+</ul>
+</li>
+<li><strong><code>docker exec -it &lt;ID或名字&gt; bash</code><strong>：</strong>最强命令！</strong> 它可以让你直接“钻”进容器内部。<ul>
+<li><strong>💡 干货：</strong> 执行后，你的终端提示符会变，这时你就在容器的系统里了。想看配置、改文件？随你便。输入 <code>exit</code> 即可退出，回到宿主机。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-清理类：一键“断舍离”"><a href="#4-清理类：一键“断舍离”" class="headerlink" title="4. 清理类：一键“断舍离”"></a>4. 清理类：一键“断舍离”</h3><p>Docker 玩久了，会产生一堆没用的中间镜像、停止的容器和孤儿网络，非常占硬盘。</p>
+<ul>
+<li>**<code>docker system prune</code>**：Docker 界的“一键清理”。<ul>
+<li><strong>直击心灵：</strong> 它会删掉所有停止的容器、没用的网络和悬空的镜像。运行前它会提示你，确认后，你会看到屏幕上跳出“释放了数 GB 空间”，那种清爽感简直无法言喻。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="💡-为什么这些命令是你的“生存手册”？"><a href="#💡-为什么这些命令是你的“生存手册”？" class="headerlink" title="💡 为什么这些命令是你的“生存手册”？"></a>💡 为什么这些命令是你的“生存手册”？</h3><ul>
+<li><strong>排查问题：</strong> <code>ps</code> 发现容器停了 -&gt; <code>logs</code> 查看崩溃原因 -&gt; <code>exec</code> 进去修补配置。这一套组合拳能解决 90% 的 Docker 故障。</li>
+<li><strong>效率至上：</strong> 记住常用的 ID 前三位就行。比如 ID 是 <code>ae32f...</code>，你只需要输入 <code>docker stop ae3</code>，Docker 就能聪明地认出它。</li>
+</ul>
+<hr>
+<h3 id="⚠️-小贴士："><a href="#⚠️-小贴士：" class="headerlink" title="⚠️ 小贴士："></a>⚠️ 小贴士：</h3><p>如果你忘了某个命令怎么用，别急着百度，直接在命令后面加 <code>--help</code>。例如：<code>docker run --help</code>。Docker 的自带文档非常清晰，那是它给开发者留下的“藏宝图”。</p>
+<h2 id="五、-关键进阶：不仅仅是运行"><a href="#五、-关键进阶：不仅仅是运行" class="headerlink" title="五、 关键进阶：不仅仅是运行"></a>五、 关键进阶：不仅仅是运行</h2><p>当你已经能熟练地构建镜像、运行容器时，你其实已经掌握了 Docker 的“单兵作战”能力。但在真实的生产环境里，单打独斗是不够的。</p>
+<p>为了让你从“会用工具”进阶到“能架构系统”，有两个绕不开的课题。虽然我们不在这里深入展开，但你必须知道它们的存在，因为它们是通往高阶开发的必经之路。</p>
+<hr>
+<h3 id="1-数据持久化-Volumes-：给容器装上“外挂硬盘”"><a href="#1-数据持久化-Volumes-：给容器装上“外挂硬盘”" class="headerlink" title="1. 数据持久化 (Volumes)：给容器装上“外挂硬盘”"></a>1. 数据持久化 (Volumes)：给容器装上“外挂硬盘”</h3><p>还记得我们说过，容器是“随用随弃”的吗？</p>
+<ul>
+<li><strong>扎心的场景：</strong> 你用 Docker 跑了一个数据库（MySQL），存了三万条用户数据。某天你觉得容器有点卡，随手执行了 <code>docker rm -f mysql-container</code>。等你再次启动它时，你会绝望地发现：<strong>数据库空空如也，数据全丢了。</strong></li>
+<li><strong>硬核干货：</strong><ul>
+<li>容器默认的存储层是<strong>非持久化</strong>的。</li>
+<li><strong>Volume（数据卷）</strong> 就像是给容器插上了一个“外部移动硬盘”。</li>
+<li>通过 <code>v</code> 参数，你可以把宿主机的某个文件夹“挂载”到容器内部。</li>
+<li><strong>直击心灵：</strong> 容器可以死，但数据必须永生。有了 Volume，即使你把容器删一百次，只要“硬盘”还在，重新挂载上，数据依然完好如初。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-容器编排-Docker-Compose-：从“单兵”到“军团”"><a href="#2-容器编排-Docker-Compose-：从“单兵”到“军团”" class="headerlink" title="2. 容器编排 (Docker Compose)：从“单兵”到“军团”"></a>2. 容器编排 (Docker Compose)：从“单兵”到“军团”</h3><p>现代应用很少是孤立的。一个典型的网页应用通常包含：一个前端、一个后端 API、一个数据库、一个 Redis 缓存。</p>
+<ul>
+<li><strong>扎心的场景：</strong> 如果你用基础命令，你需要手动执行 4 次 <code>docker run</code>。你得小心翼翼地记下每个容器的名字，还得手动去配置它们之间的网络连接。这哪里是开发？这简直是体力活。</li>
+<li><strong>硬核干货：</strong><ul>
+<li><strong>Docker Compose</strong> 是专门用来管理“多容器应用”的工具。</li>
+<li>它使用一种叫 <strong>YAML</strong> 的配置文件。在这个文件里，你用极其优雅的文字描述出整个系统的全貌：谁是前端，谁是后端，它们怎么互相通信。</li>
+<li><strong>一键启动：</strong> 你只需要在目录下输入一行 <code>docker-compose up -d</code>，整个应用军团就会像接受检阅的仪仗队一样，整齐划一地启动起来。</li>
+</ul>
+</li>
+<li><strong>直击心灵：</strong> 如果 <code>docker run</code> 是在训练士兵，那么 <code>docker-compose</code> 就是在指挥一场战役。它让复杂的微服务部署变得像执行一段脚本一样简单。</li>
+</ul>
+<hr>
+<h3 id="💡-为什么这两个概念很重要？"><a href="#💡-为什么这两个概念很重要？" class="headerlink" title="💡 为什么这两个概念很重要？"></a>💡 为什么这两个概念很重要？</h3><p>掌握了<strong>数据持久化</strong>，你才敢在生产环境使用 Docker 存储重要数据；</p>
+<p>掌握了<strong>容器编排</strong>，你才真正具备了搭建复杂微服务系统的能力。</p>
+<p>这就是从“玩玩而已”到“职业选手”的质变。</p>
+<hr>
+<h3 id="⚠️-小贴士：-1"><a href="#⚠️-小贴士：-1" class="headerlink" title="⚠️ 小贴士："></a>⚠️ 小贴士：</h3><p>如果你对这两个概念感到好奇，可以试着去搜索一下：</p>
+<ul>
+<li>“Docker 挂载宿主机目录”</li>
+<li>“docker-compose.yml 编写指南”</li>
+</ul>
+<h2 id="六、-结语：通往环境自由之路"><a href="#六、-结语：通往环境自由之路" class="headerlink" title="六、 结语：通往环境自由之路"></a>六、 结语：通往环境自由之路</h2><h3 id="1-总结：Docker-不仅仅是一个工具"><a href="#1-总结：Docker-不仅仅是一个工具" class="headerlink" title="1. 总结：Docker 不仅仅是一个工具"></a>1. 总结：Docker 不仅仅是一个工具</h3><p>很多人最初把 Docker 当作一个“更轻量级的虚拟机”，但这大大低估了它的价值。</p>
+<p>Docker 真正的魅力在于它建立了一种 <strong>“标准”</strong> 。就像物理世界里的集装箱统一了全球的物流体系一样，Docker 统一了软件交付的规格。无论你的代码是用什么语言写的，无论它依赖多么复杂的库，只要装进 Docker 这个标准的“集装箱”，它就能在任何地方以同样的方式运行。</p>
+<p><strong>它把“环境安装”这个充满了玄学和运气成分的操作，变成了“复制粘贴”一样精确的工业行为。</strong></p>
+<h3 id="2-展望：开启云原生的大门"><a href="#2-展望：开启云原生的大门" class="headerlink" title="2. 展望：开启云原生的大门"></a>2. 展望：开启云原生的大门</h3><p>掌握 Docker，并不是终点，而是一个全新世界的起点。它是现代互联网架构的<strong>入场券</strong>：</p>
+<ul>
+<li><strong>微服务：</strong> 每一个微小的服务都住在自己的容器里，互不干扰，独立扩容。</li>
+<li><strong>CI&#x2F;CD（持续集成&#x2F;持续部署）：</strong> 代码提交后，自动构建镜像、自动测试、自动上线。</li>
+<li><strong>Kubernetes (K8s)：</strong> 当你有成千上万个容器需要管理时，这套“集装箱指挥系统”将带你进入真正的技术深水区。</li>
+</ul>
+<p>没有 Docker 奠定的基础，这些高大上的架构都只是空中楼阁。</p>
+<h3 id="3-行动：最好的学习就是“现在就开始”"><a href="#3-行动：最好的学习就是“现在就开始”" class="headerlink" title="3. 行动：最好的学习就是“现在就开始”"></a>3. 行动：最好的学习就是“现在就开始”</h3><p>技术文章看得再多，也不如一次真实的 <code>docker run</code> 来得震撼。</p>
+<ul>
+<li><strong>今日任务：</strong><ol>
+<li>去官方网站下载并安装 <strong>Docker Desktop</strong>。</li>
+<li>尝试在终端输入 <code>docker run hello-world</code>。</li>
+<li>参考本文第三章，尝试把你正在写的一个小项目“打”成镜像。</li>
+</ol>
+</li>
+</ul>
+<p>当你第一次看到自己的程序在没有预装任何环境的电脑上秒速跑起来时，你会感受到那种前所未有的爽快感——那就是 <strong>“环境自由”</strong> 的味道。</p>
+<p><strong>代码不再是脆弱的盆栽，只能在你的实验室里生存；它已经变成了钢铁铸造的集装箱，准备好去征服星辰大海。</strong></p>
+<hr>
+<h3 id="✍️-写在最后"><a href="#✍️-写在最后" class="headerlink" title="✍️ 写在最后"></a>✍️ 写在最后</h3><p>这篇指南只是为你推开了门，门外的世界精彩纷呈。如果你在实践中遇到了报错，别灰心，那是 Docker 在教你如何更好地掌控它。</p>
+<p><strong>愿你的机器永远不崩，愿你的环境永远自由！</strong></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Docker 零基础入门：从“代码能跑”到“环境自由”</p><p><a href="https://yiluqingtai.github.io/2025/12/20/Docker 零基础入门：从“代码能跑”到“环境自由”/">https://yiluqingtai.github.io/2025/12/20/Docker 零基础入门：从“代码能跑”到“环境自由”/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>yiluqingtai</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-12-20</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Docker/">Docker</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/">容器化</a><a class="link-muted mr-2" rel="tag" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">环境配置</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/12/20/Docker-%E8%BF%9B%E9%98%B6%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AE%A9%E5%AE%B9%E5%99%A8%E9%87%8C%E7%9A%84%E6%95%B0%E6%8D%AE%E2%80%9C%E9%95%BF%E7%94%9F%E4%B8%8D%E8%80%81%E2%80%9D%EF%BC%9F%E2%80%94%E2%80%94-%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E6%A1%88/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Docker 进阶：如何让容器里的数据“长生不老”？—— 深度解析数据持久化方案</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/12/20/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Hexo-GitHub-Pages-%E6%90%AD%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"><span class="level-item">从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="yiluqingtai"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">yiluqingtai</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives/"><p class="title">36</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories/"><p class="title">12</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags/"><p class="title">78</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/yiluqingtai" target="_blank" rel="me noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Github" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#引言：那个困扰每个程序员的噩梦"><span class="level-left"><span class="level-item">引言：那个困扰每个程序员的噩梦</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-那个困扰每个程序员的深夜噩梦"><span class="level-left"><span class="level-item">1. 那个困扰每个程序员的深夜噩梦</span></span></a></li><li><a class="level is-mobile" href="#2-坠入“环境地狱”：程序员的隐形工时"><span class="level-left"><span class="level-item">2. 坠入“环境地狱”：程序员的隐形工时</span></span></a></li><li><a class="level is-mobile" href="#3-救星驾到：什么是-Docker？"><span class="level-left"><span class="level-item">3. 救星驾到：什么是 Docker？</span></span></a></li></ul></li><li><a class="level is-mobile" href="#一、-核心概念：三个词搞定-Docker"><span class="level-left"><span class="level-item">一、 核心概念：三个词搞定 Docker</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-镜像-Image-——-它是“被冻结的模具”"><span class="level-left"><span class="level-item">1. 镜像 (Image) —— 它是“被冻结的模具”</span></span></a></li><li><a class="level is-mobile" href="#2-容器-Container-——-它是“活着的集装箱”"><span class="level-left"><span class="level-item">2. 容器 (Container) —— 它是“活着的集装箱”</span></span></a></li><li><a class="level is-mobile" href="#3-仓库-Registry-——-它是“全球集装箱码头”"><span class="level-left"><span class="level-item">3. 仓库 (Registry) —— 它是“全球集装箱码头”</span></span></a></li><li><a class="level is-mobile" href="#总结一下这三者的关系："><span class="level-left"><span class="level-item">总结一下这三者的关系：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#二、-快速上手：你的第一个-Docker-应用"><span class="level-left"><span class="level-item">二、 快速上手：你的第一个 Docker 应用</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#二、-快速上手：你的第一个-Docker-应用-1"><span class="level-left"><span class="level-item">二、 快速上手：你的第一个 Docker 应用</span></span></a></li><li><a class="level is-mobile" href="#1-第一步：拉取镜像-——-docker-pull"><span class="level-left"><span class="level-item">1. 第一步：拉取镜像 —— docker pull</span></span></a></li><li><a class="level is-mobile" href="#2-第二步：启动容器-——-docker-run（见证奇迹的时刻）"><span class="level-left"><span class="level-item">2. 第二步：启动容器 —— docker run（见证奇迹的时刻）</span></span></a></li><li><a class="level is-mobile" href="#3-第三步：验证结果-——-享受“环境自由”"><span class="level-left"><span class="level-item">3. 第三步：验证结果 —— 享受“环境自由”</span></span></a></li><li><a class="level is-mobile" href="#💡-为什么这一步让你“直击心灵”？"><span class="level-left"><span class="level-item">💡 为什么这一步让你“直击心灵”？</span></span></a></li><li><a class="level is-mobile" href="#⚠️-小贴士（避坑指南）："><span class="level-left"><span class="level-item">⚠️ 小贴士（避坑指南）：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#三、-实战：把你的代码“装进”集装箱"><span class="level-left"><span class="level-item">三、 实战：把你的代码“装进”集装箱</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-准备食材：你的应用代码"><span class="level-left"><span class="level-item">1. 准备食材：你的应用代码</span></span></a></li><li><a class="level is-mobile" href="#2-编写-Dockerfile：镜像的“施工蓝图”"><span class="level-left"><span class="level-item">2. 编写 Dockerfile：镜像的“施工蓝图”</span></span></a></li><li><a class="level is-mobile" href="#3-炼金时刻：构建镜像-——-docker-build"><span class="level-left"><span class="level-item">3. 炼金时刻：构建镜像 —— docker build</span></span></a></li><li><a class="level is-mobile" href="#4-终极验证：让你的应用“原地起飞”"><span class="level-left"><span class="level-item">4. 终极验证：让你的应用“原地起飞”</span></span></a></li><li><a class="level is-mobile" href="#💡-这一步的价值在哪里？"><span class="level-left"><span class="level-item">💡 这一步的价值在哪里？</span></span></a></li><li><a class="level is-mobile" href="#⚠️-小贴士（深度干货）："><span class="level-left"><span class="level-item">⚠️ 小贴士（深度干货）：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#四、-基础命令：通关口袋书"><span class="level-left"><span class="level-item">四、 基础命令：通关口袋书</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-查看类：开启“上帝视角”"><span class="level-left"><span class="level-item">1. 查看类：开启“上帝视角”</span></span></a></li><li><a class="level is-mobile" href="#2-操作类：掌握“生命周期”"><span class="level-left"><span class="level-item">2. 操作类：掌握“生命周期”</span></span></a></li><li><a class="level is-mobile" href="#3-探秘类：施展“穿墙术”"><span class="level-left"><span class="level-item">3. 探秘类：施展“穿墙术”</span></span></a></li><li><a class="level is-mobile" href="#4-清理类：一键“断舍离”"><span class="level-left"><span class="level-item">4. 清理类：一键“断舍离”</span></span></a></li><li><a class="level is-mobile" href="#💡-为什么这些命令是你的“生存手册”？"><span class="level-left"><span class="level-item">💡 为什么这些命令是你的“生存手册”？</span></span></a></li><li><a class="level is-mobile" href="#⚠️-小贴士："><span class="level-left"><span class="level-item">⚠️ 小贴士：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#五、-关键进阶：不仅仅是运行"><span class="level-left"><span class="level-item">五、 关键进阶：不仅仅是运行</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-数据持久化-Volumes-：给容器装上“外挂硬盘”"><span class="level-left"><span class="level-item">1. 数据持久化 (Volumes)：给容器装上“外挂硬盘”</span></span></a></li><li><a class="level is-mobile" href="#2-容器编排-Docker-Compose-：从“单兵”到“军团”"><span class="level-left"><span class="level-item">2. 容器编排 (Docker Compose)：从“单兵”到“军团”</span></span></a></li><li><a class="level is-mobile" href="#💡-为什么这两个概念很重要？"><span class="level-left"><span class="level-item">💡 为什么这两个概念很重要？</span></span></a></li><li><a class="level is-mobile" href="#⚠️-小贴士：-1"><span class="level-left"><span class="level-item">⚠️ 小贴士：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#六、-结语：通往环境自由之路"><span class="level-left"><span class="level-item">六、 结语：通往环境自由之路</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-总结：Docker-不仅仅是一个工具"><span class="level-left"><span class="level-item">1. 总结：Docker 不仅仅是一个工具</span></span></a></li><li><a class="level is-mobile" href="#2-展望：开启云原生的大门"><span class="level-left"><span class="level-item">2. 展望：开启云原生的大门</span></span></a></li><li><a class="level is-mobile" href="#3-行动：最好的学习就是“现在就开始”"><span class="level-left"><span class="level-item">3. 行动：最好的学习就是“现在就开始”</span></span></a></li><li><a class="level is-mobile" href="#✍️-写在最后"><span class="level-left"><span class="level-item">✍️ 写在最后</span></span></a></li></ul></li></ul></div></div><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Markdown/"><span class="level-start"><span class="level-item">Markdown</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="level-start"><span class="level-item">大数据</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"><span class="level-start"><span class="level-item">大模型</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/"><span class="level-start"><span class="level-item">室内绿植</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"><span class="level-start"><span class="level-item">技术教程</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E8%B5%84%E6%BA%90/"><span class="level-start"><span class="level-item">技术资源</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"><span class="level-start"><span class="level-item">生活随笔</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D/"><span class="level-start"><span class="level-item">经济金融</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%8C%B6/"><span class="level-start"><span class="level-item">茶</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/"><span class="level-start"><span class="level-item">读后感</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-11T13:15:23.000Z">2026-01-11</time></p><p class="title"><a href="/2026/01/11/%E9%83%BD%E5%B8%82%E7%BB%BF%E6%B4%B2%E5%85%BB%E6%88%90%E8%AE%B0%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AE%A9%E6%8C%BA%E6%8B%94%E7%9A%84%E8%99%8E%E7%9A%AE%E5%85%B0%E6%88%90%E4%B8%BA%E4%BD%A0%E5%AE%A4%E5%86%85%E7%9A%84%E2%80%9C%E4%BD%8E%E8%80%97%E8%83%BD%E4%BF%9D%E9%95%96%E2%80%9D%EF%BC%9F/">都市绿洲养成记：如何让挺拔的虎皮兰成为你室内的“低耗能保镖”？</a></p><p class="categories"><a href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/">室内绿植</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T14:50:26.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82-Spark%EF%BC%9A%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E3%80%81%E7%94%9F%E6%80%81%E5%8D%8F%E5%90%8C%E4%B8%8E%E4%BC%81%E4%B8%9A%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B/">一文搞懂 Spark：核心原理、生态协同与企业实战选型</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T01:46:34.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E3%80%90%E6%95%B0%E6%8D%AE%E6%B1%9F%E6%B9%96%E5%85%B5%E5%99%A8%E8%B0%B1%E3%80%91%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E7%9A%84%E2%80%9C%E8%A7%92%E8%89%B2%E2%80%9D%E4%B8%8E%E2%80%9C%E5%86%85%E5%8A%9F%E2%80%9D-Kafka-Spark-Hive-Flink-ClickHouse/">【数据江湖兵器谱】一文读懂主流大数据工具的“角色”与“内功” (Kafka/Spark/Hive/Flink/ClickHouse)</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-07T15:29:11.000Z">2026-01-07</time></p><p class="title"><a href="/2026/01/07/AI-%E6%B5%AA%E6%BD%AE%E4%B8%8B%EF%BC%8C%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E2%80%9C%E4%B8%8A%E8%BD%A6%E2%80%9D%EF%BC%9F%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B0%B1%E4%B8%9A%E7%9A%84-6-%E5%A4%A7%E7%BB%86%E5%88%86%E6%96%B9%E5%90%91%E5%85%A8%E8%A7%A3%E6%9E%90/">AI 浪潮下，普通程序员如何“上车”？大模型就业的 6 大细分方向全解析</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-06T01:24:41.000Z">2026-01-06</time></p><p class="title"><a href="/2026/01/06/%E7%BB%99%E6%96%B0%E6%89%8B%E7%9A%84%E8%8C%B6%E5%8F%B6%E9%80%9A%E5%85%B3%E6%89%8B%E5%86%8C%EF%BC%9A%E4%BB%8E%E2%80%9C%E7%BB%BF%E8%8C%B6%E5%B0%8F%E7%99%BD%E2%80%9D%E5%88%B0%E2%80%9C%E5%93%81%E8%8C%97%E9%AB%98%E6%89%8B%E2%80%9D%E5%8F%AA%E9%9C%80%E8%BF%99%E4%B8%80%E7%AF%87/">给新手的茶叶通关手册：从“绿茶小白”到“品茗高手”只需这一篇</a></p><p class="categories"><a href="/categories/%E8%8C%B6/">茶</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2026 yiluqingtai</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script><!-- hexo injector body_end start -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script>
+    (function() {
+        const mermaidKeywords = ['graph ', 'sequenceDiagram', 'gantt', 'classDiagram', 'stateDiagram', 'pie', 'erDiagram', 'journey'];
+
+        function renderMermaid() {
+            if (!window.mermaid) return;
+
+            // 扫描所有的 highlight 代码块
+            const blocks = document.querySelectorAll('.highlight');
+            
+            blocks.forEach(block => {
+                const codeElement = block.querySelector('.code');
+                if (!codeElement) return;
+                
+                const rawCode = codeElement.innerText.trim();
+                
+                // 检查开头是否符合 Mermaid 语法
+                const isMermaid = mermaidKeywords.some(kw => rawCode.startsWith(kw));
+                
+                if (isMermaid) {
+                    const container = document.createElement('div');
+                    container.className = 'mermaid';
+                    container.textContent = rawCode;
+
+                    // 替换掉整个 figure 标签
+                    block.parentNode.insertBefore(container, block);
+                    block.remove();
+                }
+            });
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose',
+                flowchart: { 
+                    htmlLabels: false, // 设为 false 能极大缓解文字溢出问题
+                    useMaxWidth: true 
+                }
+            });
+            
+            mermaid.run();
+        }
+
+        window.addEventListener('load', renderMermaid);
+        document.addEventListener('pjax:success', renderMermaid);
+    })();
+    </script>
+    <!-- hexo injector body_end end --></body></html>

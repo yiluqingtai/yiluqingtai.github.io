@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客 - Yiluqingtai&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="yiluqingtai"><meta name="msapplication-TileImage" content="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="yiluqingtai"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文是一份详尽的 Hexo 博客搭建实战指南。涵盖了从 Node.js 与 Git 环境配置、框架初始化到个性化主题定制及 GitHub Pages 自动部署的全过程，助力开发者快速构建个人技术品牌与知识沉淀的“数字花园”。"><meta property="og:type" content="blog"><meta property="og:title" content="从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客"><meta property="og:url" content="https://yiluqingtai.github.io/2025/12/20/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Hexo-GitHub-Pages-%E6%90%AD%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"><meta property="og:site_name" content="Yiluqingtai&#039;s Blog"><meta property="og:description" content="本文是一份详尽的 Hexo 博客搭建实战指南。涵盖了从 Node.js 与 Git 环境配置、框架初始化到个性化主题定制及 GitHub Pages 自动部署的全过程，助力开发者快速构建个人技术品牌与知识沉淀的“数字花园”。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://yiluqingtai.github.io/img/og_image.png"><meta property="article:published_time" content="2025-12-20T00:06:00.000Z"><meta property="article:author" content="yiluqingtai"><meta property="article:tag" content="Hexo"><meta property="article:tag" content="博客搭建"><meta property="article:tag" content="Node.js"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://yiluqingtai.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://yiluqingtai.github.io/2025/12/20/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Hexo-GitHub-Pages-%E6%90%AD%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"},"headline":"从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客","image":["https://yiluqingtai.github.io/img/og_image.png"],"datePublished":"2025-12-20T00:06:00.000Z","author":{"@type":"Person","name":"yiluqingtai"},"publisher":{"@type":"Organization","name":"Yiluqingtai's Blog","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/16957962?s=96&v=4"}},"description":"本文是一份详尽的 Hexo 博客搭建实战指南。涵盖了从 Node.js 与 Git 环境配置、框架初始化到个性化主题定制及 GitHub Pages 自动部署的全过程，助力开发者快速构建个人技术品牌与知识沉淀的“数字花园”。"}</script><link rel="canonical" href="https://yiluqingtai.github.io/2025/12/20/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Hexo-GitHub-Pages-%E6%90%AD%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"><link rel="icon" href="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script>
+    <style>
+        /* 1. 整体容器和比例保持 */
+        .container { max-width: 1440px !important; width: 95% !important; }
+        .column.is-6-widescreen, .column.is-8-desktop, .column.is-8-tablet { flex: none !important; width: 60% !important; }
+        .column.is-3-widescreen, .column.is-4-desktop { flex: none !important; width: 20% !important; }
+
+        /* 2. 目录滚动核心修复 */
+        /* 针对 Icarus 的 TOC 挂件内部容器进行限高 */
+        .widget[data-type="toc"] .card-content, 
+        .widget.toc .card-content {
+            max-height: 70vh !important;    /* 限制为屏幕高度的 70% */
+            overflow-y: auto !important;   /* 强制开启垂直滚动 */
+            display: block !important;
+        }
+
+        /* 3. 美化目录滚动条（可选，让它更细一点） */
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .widget[data-type="toc"] .card-content::-webkit-scrollbar-thumb {
+            background: #dbdbdb;
+            border-radius: 10px;
+        }
+
+        /* 4. 如果侧边栏设置了 sticky: true，确保它不会把底部切掉 */
+        .column-left, .column-right {
+            align-self: flex-start; 
+            height: auto;
+        }
+    </style>
+    
+    <style>
+        /* 1. 初始隐藏，防止闪烁 */
+        .highlight.plaintext, .highlight.mermaid, .highlight.language-mermaid {
+            /* 我们稍后通过 JS 逻辑判断是否隐藏 */
+        }
+        .mermaid {
+            background: white !important;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            /* 修复文字截断的核心 */
+            line-height: 1.2 !important;
+            font-family: Arial !important;
+        }
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto;
+        }
+    </style>
+    <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-12-20T00:06:00.000Z" title="12/20/2025, 12:06:00 AM">2025-12-20</time>发表</span><span class="level-item"> yiluqingtai </span><span class="level-item"><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">技术教程</a></span><span class="level-item">42 分钟读完 (大约6289个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客</h1><div class="content"><p>最好的种树时间是十年前，其次是现在。写博客也是。</p>
+<h2 id="1-前言-Introduction"><a href="#1-前言-Introduction" class="headerlink" title="1. 前言 (Introduction)"></a>1. 前言 (Introduction)</h2><h3 id="1-1-为什么要写博客？——建立你的“数字花园”"><a href="#1-1-为什么要写博客？——建立你的“数字花园”" class="headerlink" title="1.1 为什么要写博客？——建立你的“数字花园”"></a>1.1 为什么要写博客？——建立你的“数字花园”</h3><p>在碎片化信息爆炸的时代，为什么我们依然需要一个独立博客？</p>
+<ul>
+<li><strong>建立个人技术品牌：</strong> 博客是程序员最好的“动态简历”。它不仅展示了你的技术栈，更记录了你思考问题的逻辑和解决问题的过程，能极大地提升个人影响力。</li>
+<li><strong>深度学习与知识复盘：</strong> 根据费曼学习法，最好的学习方式是“教会别人”。将碎片化的知识整理成文章，是查漏补缺、内化知识的绝佳途径。</li>
+<li><strong>沉淀与输出：</strong> 社交媒体的信息是流动的，而博客是静止的。它是你的数字资产，多年后回看，你会清晰地看到自己的成长轨迹。</li>
+<li><strong>掌握话语权：</strong> 告别第三方平台的审核限制、广告干扰和突如其来的关停风险。在自己的博客里，你拥有绝对的自主权和排版权。</li>
+</ul>
+<h3 id="1-2-为什么选择-Hexo？——轻量与极致的平衡"><a href="#1-2-为什么选择-Hexo？——轻量与极致的平衡" class="headerlink" title="1.2 为什么选择 Hexo？——轻量与极致的平衡"></a>1.2 为什么选择 Hexo？——轻量与极致的平衡</h3><p>在众多的博客框架（如 WordPress, Hugo, Jekyll）中，Hexo 脱颖而出成为很多开发者的首选，原因在于：</p>
+<ul>
+<li><strong>极速生成：</strong> 基于 Node.js 开发，拥有极快的静态页面生成速度，上百篇文章瞬间渲染完成。</li>
+<li><strong>Markdown 原生支持：</strong> 专为写作而生。你只需专注于文字，排版交给 Markdown，展示交给 Hexo。</li>
+<li><strong>生态繁荣：</strong> 拥有数百种精美主题（如 NexT, Fluid, Butterfly）和丰富的插件，无论是添加评论系统、搜索功能还是 SEO 优化，都能一键实现。</li>
+<li><strong>零成本托管：</strong> 配合 GitHub Pages 或 Vercel，你无需购买服务器，无需维护数据库，真正实现“零元购”搭建全网可访问的站点。</li>
+<li><strong>纯粹且安全：</strong> 生成的是静态 HTML，没有任何数据库注入风险，访问速度极快。</li>
+</ul>
+<h3 id="1-3-本文你能学到什么？——从零到一的实战地图"><a href="#1-3-本文你能学到什么？——从零到一的实战地图" class="headerlink" title="1.3 本文你能学到什么？——从零到一的实战地图"></a>1.3 本文你能学到什么？——从零到一的实战地图</h3><p>本文将拒绝枯燥的理论，以实战为导向，手把手带你完成以下任务：</p>
+<ol>
+<li><strong>环境搭建：</strong> 配置 Node.js 与 Git，打好底层基础。</li>
+<li><strong>核心构建：</strong> 从零初始化 Hexo 框架，让博客在你的本地跑起来。</li>
+<li><strong>个性化定制：</strong> 挑选并配置一套高颜值主题，让你的博客与众不同。</li>
+<li><strong>内容创作：</strong> 掌握 Markdown 写作技巧及 Hexo 常用指令。</li>
+<li><strong>全球发布：</strong> 将博客部署至 GitHub Pages，让全世界都能通过专属域名看到你的文字。</li>
+</ol>
+<hr>
+<h2 id="2-环境准备-Prerequisites"><a href="#2-环境准备-Prerequisites" class="headerlink" title="2. 环境准备 (Prerequisites)"></a>2. 环境准备 (Prerequisites)</h2><p>在正式搭建博客之前，我们需要在电脑上安装三件“神兵利器”：<strong>Node.js</strong>（动力源）、<strong>Git</strong>（运输车）以及一个 <strong>GitHub 账号</strong>（停机坪）。</p>
+<h3 id="2-1-安装-Node-js：Hexo-的心脏"><a href="#2-1-安装-Node-js：Hexo-的心脏" class="headerlink" title="2.1 安装 Node.js：Hexo 的心脏"></a>2.1 安装 Node.js：Hexo 的心脏</h3><p>Hexo 是基于 Node.js 运行的，因此这是最基础的环境。</p>
+<ul>
+<li><p><strong>下载地址：</strong> 访问 <a target="_blank" rel="noopener" href="https://nodejs.org/">Node.js 官网</a>。</p>
+</li>
+<li><p><strong>版本选择：</strong> 强烈建议选择 <strong>LTS (Long Term Support) 版本</strong>（如 v18 或 v20），因为 LTS 版本更稳定，不容易出现兼容性问题。</p>
+</li>
+<li><p><strong>安装步骤：</strong> 像安装普通软件一样点击“下一步”即可。安装时记得勾选“Add to PATH”选项。</p>
+</li>
+<li><p><strong>验证安装：</strong> 打开终端（Windows 推荐使用 PowerShell 或 CMD，macOS 使用 Terminal），输入以下命令：<em>如果能看到版本号（如 v18.16.0），说明安装成功。</em></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>🚀 进阶技巧： 由于国内访问 npm 官方源较慢，建议安装后立即配置淘宝镜像（或华为云镜像）来加速后续的插件下载：</p>
+<p><code>npm config set registry https://registry.npmmirror.com</code></p>
+</blockquote>
+<h3 id="2-2-安装-Git：代码管理与自动部署"><a href="#2-2-安装-Git：代码管理与自动部署" class="headerlink" title="2.2 安装 Git：代码管理与自动部署"></a>2.2 安装 Git：代码管理与自动部署</h3><p>Git 负责将你本地写好的文章“推”到远程服务器上。</p>
+<ul>
+<li><p><strong>下载地址：</strong> 访问 <a target="_blank" rel="noopener" href="https://git-scm.com/">Git 官网</a>。</p>
+</li>
+<li><p><strong>安装步骤：</strong> 默认设置即可。安装完成后，在右键菜单中看到 “Git Bash Here” 即表示安装成功。</p>
+</li>
+<li><p><strong>验证安装：</strong> 在终端输入：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置身份（必做）：</strong> 第一次使用 Git 需要告诉它你是谁，否则无法提交代码。输入以下命令：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的用户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;你的邮箱地址&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2-3-GitHub-账号与仓库准备：你的免费服务器"><a href="#2-3-GitHub-账号与仓库准备：你的免费服务器" class="headerlink" title="2.3 GitHub 账号与仓库准备：你的免费服务器"></a>2.3 GitHub 账号与仓库准备：你的免费服务器</h3><p>我们需要 GitHub 提供的 <strong>GitHub Pages</strong> 服务来托管你的静态博客。</p>
+<ul>
+<li><strong>注册账号：</strong> 访问 <a target="_blank" rel="noopener" href="https://github.com/">GitHub官网</a> 注册（如果已有账号请忽略）。</li>
+<li><strong>新建仓库 (New repository)：</strong><ul>
+<li><strong>仓库名 (Repository Name) 极其重要：</strong> 必须按照这个格式：<code>你的用户名.github.io</code>。</li>
+<li><em>例如：</em> 如果你的用户名是 <code>tech-sharen</code>，那么仓库名必须是 <code>tech-sharen.github.io</code>。</li>
+<li><strong>权限选择：</strong> 必须设为 <strong>Public</strong>（公开）。</li>
+<li><strong>其他勾选：</strong> 无需勾选 README 或 License，直接点击 <code>Create repository</code>。</li>
+</ul>
+</li>
+<li><strong>SSH 公钥配置（进阶推荐）：</strong> 为了让你每次部署博客时不需要输入账号密码，建议配置 SSH Key。这能极大提升后续的使用体验。</li>
+</ul>
+<hr>
+<h2 id="3-Hexo-安装与初始化-Getting-Started"><a href="#3-Hexo-安装与初始化-Getting-Started" class="headerlink" title="3. Hexo 安装与初始化 (Getting Started)"></a>3. Hexo 安装与初始化 (Getting Started)</h2><p>环境配好后，只需几条简单的指令，就能让你的博客在本地跑起来。</p>
+<h3 id="3-1-安装-Hexo-cli-工具"><a href="#3-1-安装-Hexo-cli-工具" class="headerlink" title="3.1 安装 Hexo-cli 工具"></a>3.1 安装 Hexo-cli 工具</h3><p><code>hexo-cli</code> 是 Hexo 的命令行工具，安装了它，你才能在终端里使用 <code>hexo</code> 开头的命令。</p>
+<p>在终端执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>注意：</strong> <code>g</code> 代表全局安装。安装完成后，你可以输入 <code>hexo -v</code> 查看版本，确认是否安装成功。</li>
+</ul>
+<h3 id="3-2-初始化博客文件夹"><a href="#3-2-初始化博客文件夹" class="headerlink" title="3.2 初始化博客文件夹"></a>3.2 初始化博客文件夹</h3><p>找一个你觉得舒服的地方（比如 <code>D:\Blog</code> 或 <code>~/Documents/Blog</code>），在该目录下打开终端，执行以下操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化一个名为 my-blog 的文件夹（名字可以自定义）</span></span><br><span class="line">hexo init my-blog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入这个文件夹</span></span><br><span class="line"><span class="built_in">cd</span> my-blog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装必要的依赖包</span></span><br><span class="line">npm install</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>发生了什么？</strong> 执行 <code>hexo init</code> 时，Hexo 会自动从 GitHub 拉取一套完整的“样板房”文件到你的文件夹里。</li>
+</ul>
+<h3 id="3-3-本地预览：见证奇迹的时刻"><a href="#3-3-本地预览：见证奇迹的时刻" class="headerlink" title="3.3 本地预览：见证奇迹的时刻"></a>3.3 本地预览：见证奇迹的时刻</h3><p>现在，你的博客其实已经“搭建”好了。执行以下命令开启预览：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>s</code> 是 <code>server</code> 的缩写。</li>
+<li><strong>查看结果：</strong> 打开浏览器，访问 <code>http://localhost:4000</code>。</li>
+<li>你现在应该能看到一个简洁大气的默认页面（Landscaping 主题），上面有一篇名为 “Hello World” 的示例文章。</li>
+</ul>
+<blockquote>
+<p>💡 小贴士： 在终端按 Ctrl + C 可以停止本地服务器。</p>
+</blockquote>
+<h3 id="3-4-目录结构详解：别被这些文件吓到"><a href="#3-4-目录结构详解：别被这些文件吓到" class="headerlink" title="3.4 目录结构详解：别被这些文件吓到"></a>3.4 目录结构详解：别被这些文件吓到</h3><p>初始化完成后，你会看到文件夹里多了一堆文件。了解它们的用途，能让你后续定制时事半功倍：</p>
+<ul>
+<li><strong><code>_config.yml</code> (网站配置文件)：</strong> 博客的“大脑”。你的网站标题、作者信息、URL 格式、推送设置都在这里修改。</li>
+<li><strong><code>package.json</code>：</strong> 记录了 Hexo 版本以及你安装了哪些插件。</li>
+<li><strong><code>scaffolds</code> (脚手架)：</strong> 文章的模板。比如你新建一篇文章，它会自动包含日期、标签等基础信息。</li>
+<li><strong><code>source</code> (资源文件夹)：</strong> <strong>这是你以后待得最多的地方。</strong><ul>
+<li><code>_posts</code> 文件夹：存放你写的所有 Markdown 文章。</li>
+</ul>
+</li>
+<li><strong><code>themes</code> (主题文件夹)：</strong> 存放各种皮肤。如果你下载了新主题，就放在这里。</li>
+<li><strong><code>public</code> (公共文件夹)：</strong> 静态生成的产物。执行 <code>hexo g</code> 后，Hexo 会把你的 Markdown 转换成 HTML 存放在这里。<strong>注意：不要手动修改这个文件夹里的内容。</strong></li>
+</ul>
+<hr>
+<p><strong>常用命令速查表：</strong></p>
+<ul>
+<li><code>hexo clean</code>：清除缓存（如果你发现修改没生效，执行它）。</li>
+<li><code>hexo g</code> (generate)：生成静态文件。</li>
+<li><code>hexo s</code> (server)：本地预览。</li>
+<li><code>hexo d</code> (deploy)：部署上线。</li>
+</ul>
+<hr>
+<h2 id="4-博客基础配置-Configuration"><a href="#4-博客基础配置-Configuration" class="headerlink" title="4. 博客基础配置 (Configuration)"></a>4. 博客基础配置 (Configuration)</h2><p>在 Hexo 根目录下，有一个至关重要的文件：<code>_config.yml</code>。我们称之为<strong>站点配置文件</strong>。几乎所有全局性的设置（网站名、作者、SEO 设定）都在这里完成。</p>
+<blockquote>
+<p>⚠️ 重要提醒： YAML 格式对空格极其敏感。在修改时，请务必保证每一个冒号 : 后面都有一个英文空格，否则会报错。</p>
+</blockquote>
+<h3 id="4-1-打造你的个人名片：站点信息修改"><a href="#4-1-打造你的个人名片：站点信息修改" class="headerlink" title="4.1 打造你的个人名片：站点信息修改"></a>4.1 打造你的个人名片：站点信息修改</h3><p>找到文件开头的 <code>Site</code> 部分，根据你的情况进行修改：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site - 网站基础信息</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">某某的技术博客</span>           <span class="comment"># 网站标题</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">每一个不曾起舞的日子，都是对生命的辜负</span> <span class="comment"># 副标题/座右铭</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">专注于后端开发、架构设计与好物分享</span>  <span class="comment"># 网站描述（对 SEO 搜索排名很重要）</span></span><br><span class="line"><span class="attr">keywords:</span> <span class="string">Java,</span> <span class="string">SpringCloud,</span> <span class="string">Hexo,</span> <span class="string">技术博客</span> <span class="comment"># 网站关键词</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">你的笔名</span>               <span class="comment"># 作者名字</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-CN</span>               <span class="comment"># 网站语言，设置为中文</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">Asia/Shanghai</span>       <span class="comment"># 时区，建议设为上海</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>小贴士：</strong> <code>language</code> 的设置直接决定了主题中“阅读更多”、“评论”等文字的显示语言。</li>
+</ul>
+<h3 id="4-2-设置站点-URL：让搜索引擎找到你"><a href="#4-2-设置站点-URL：让搜索引擎找到你" class="headerlink" title="4.2 设置站点 URL：让搜索引擎找到你"></a>4.2 设置站点 URL：让搜索引擎找到你</h3><p>找到 <code>URL</code> 部分。如果你打算部署在 GitHub Pages，请务必修改这里：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://你的用户名.github.io</span>  <span class="comment"># 以后你的线上博客地址</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span>                          <span class="comment"># 根路径，一般不用动</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-优化永久链接-Permalinks-：让-URL-更优雅"><a href="#4-3-优化永久链接-Permalinks-：让-URL-更优雅" class="headerlink" title="4.3 优化永久链接 (Permalinks)：让 URL 更优雅"></a>4.3 优化永久链接 (Permalinks)：让 URL 更优雅</h3><p>Hexo 默认生成的文章链接格式是 <code>年/月/日/文章标题/</code>。</p>
+<ul>
+<li><strong>默认格式的问题：</strong> 如果你以后修改了文章的发布日期，链接就会变，导致别人之前收藏的链接失效；且链接层级太深，不利于搜索引擎抓取。</li>
+<li><strong>优化建议：</strong> 建议修改为 <code>:title.html</code>。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">posts/:title.html</span>    <span class="comment"># 优化后的链接：域名/posts/文章名.html</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>这样做的好处：</strong> 无论你以后如何调整分类或日期，文章的 URL 都将保持唯一且简洁，极大地提升了 <strong>SEO（搜索引擎优化）</strong> 表现。</li>
+</ul>
+<h3 id="4-4-开启代码高亮"><a href="#4-4-开启代码高亮" class="headerlink" title="4.4 开启代码高亮"></a>4.4 开启代码高亮</h3><p>为了让技术文章里的代码块更好看，检查 <code>highlight</code> 部分（Hexo 7.0 以后默认推荐使用 <code>shiki</code> 或 <code>highlight.js</code>）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">syntax_highlighter:</span> <span class="string">highlight.js</span></span><br><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span>    <span class="comment"># 显示行号</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>如果说前面的步骤是搭建“毛坯房”，那么<strong>主题美化</strong>就是博客的“软装”阶段。Hexo 最迷人的地方就在于它极其丰富的主题生态，只需几行配置，你的博客就能从“简陋”变得“惊艳”。</p>
+<h2 id="5-主题美化：给博客“换装”-Themes"><a href="#5-主题美化：给博客“换装”-Themes" class="headerlink" title="5. 主题美化：给博客“换装” (Themes)"></a>5. 主题美化：给博客“换装” (Themes)</h2><p>Hexo 默认的 <code>landscape</code> 主题虽然稳重，但对于追求个性的开发者来说显然不够。换主题是每个 Hexo 玩家的必经之路。</p>
+<h3 id="5-1-挑选心仪的主题"><a href="#5-1-挑选心仪的主题" class="headerlink" title="5.1 挑选心仪的主题"></a>5.1 挑选心仪的主题</h3><p>你可以从以下渠道寻找灵感：</p>
+<ul>
+<li><strong>官方主题库：</strong> <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo Themes</a>（收录了上百款主题）。</li>
+<li><strong>高人气推荐：</strong><ul>
+<li><strong>Fluid：</strong> 现代化的 Material Design 风格，配置极简，文档齐全（<strong>推荐新手首选</strong>）。</li>
+<li><strong>Butterfly：</strong> 功能极其强大，特效华丽，支持高度定制。</li>
+<li><strong>NexT：</strong> Hexo 界长盛不衰的经典，极简主义，适合硬核技术博客。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-2-更换主题的通用流程"><a href="#5-2-更换主题的通用流程" class="headerlink" title="5.2 更换主题的通用流程"></a>5.2 更换主题的通用流程</h3><p>更换主题通常有两种方式：<code>git clone</code>（传统方式）和 <code>npm install</code>（现代方式，方便升级）。以 <strong>Fluid</strong> 为例：</p>
+<ol>
+<li><p><strong>下载主题：</strong></p>
+<p> 在博客根目录下执行：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-theme-fluid --save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> <em>（如果是传统方式，则是将代码 clone 到 <code>themes/</code> 文件夹下）</em></p>
+</li>
+<li><p><strong>激活主题：</strong></p>
+<p> 打开<strong>根目录</strong>下的 <code>_config.yml</code>（站点配置文件），找到 <code>theme</code> 字段：</p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 landscape 修改为 fluid</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">fluid</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>创建主题配置文件（推荐）：</strong></p>
+<p> 为了方便升级，建议在根目录新建一个 <code>_config.fluid.yml</code> 文件。Hexo 会自动用这个文件的内容覆盖主题内部的默认配置，这样你就不需要修改 <code>node_modules</code> 或 <code>themes</code> 里的源代码了。</p>
+</li>
+</ol>
+<h3 id="5-3-个性化微调：细节决定质感"><a href="#5-3-个性化微调：细节决定质感" class="headerlink" title="5.3 个性化微调：细节决定质感"></a>5.3 个性化微调：细节决定质感</h3><p>现在，打开你的主题配置文件（例如 <code>_config.fluid.yml</code>），开始打磨细节：</p>
+<ul>
+<li><p><strong>配置导航栏 (Menu)：</strong>让读者能快速找到分类和关于页。</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">Home:</span> <span class="string">/</span></span><br><span class="line">  <span class="attr">Archives:</span> <span class="string">/archives/</span></span><br><span class="line">  <span class="attr">Categories:</span> <span class="string">/categories/</span></span><br><span class="line">  <span class="attr">About:</span> <span class="string">/about/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>更换 Favicon &amp; Logo：</strong>将你的头像或网站图标放入 <code>source/img/</code> 目录下，并在配置文件中指定路径。</p>
+</li>
+<li><p><strong>社交链接：</strong>配置你的 GitHub、知乎、BiliBili 等链接，增加互动。</p>
+</li>
+<li><p><strong>全局字体与配色：</strong>许多现代主题支持一键切换“暗黑模式”或修改主色调。</p>
+</li>
+</ul>
+<h3 id="5-4-验证效果"><a href="#5-4-验证效果" class="headerlink" title="5.4 验证效果"></a>5.4 验证效果</h3><p>每次修改配置后，记得执行以下命令组合：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>为什么要 clean？</strong> Hexo 会缓存之前的静态页面，修改主题配置后如果不 clean，浏览器里看到的可能还是旧样子。</li>
+</ul>
+<blockquote>
+<p>“如果博客图片较多，建议使用图床（如 Github + PicGo）来提升加载速度。”</p>
+</blockquote>
+<p>博客的排版、配置固然重要，但<strong>内容才是核心</strong>。Hexo 采用 Markdown 作为写作语言，这对于程序员来说几乎零学习成本，且排版极其优雅。</p>
+<hr>
+<h2 id="6-开启创作：写下第一篇文章-Writing"><a href="#6-开启创作：写下第一篇文章-Writing" class="headerlink" title="6. 开启创作：写下第一篇文章 (Writing)"></a>6. 开启创作：写下第一篇文章 (Writing)</h2><p>万事俱备，现在让我们写下第一篇博文。</p>
+<h3 id="6-1-新建一篇文章"><a href="#6-1-新建一篇文章" class="headerlink" title="6.1 新建一篇文章"></a>6.1 新建一篇文章</h3><p>在博客根目录下打开终端，输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">&quot;我的第一篇技术文章&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>发生了什么：</strong> Hexo 会在 <code>source/_posts/</code> 目录下自动生成一个文件：<code>我的第一篇技术文章.md</code>。</li>
+<li><strong>提示：</strong> 如果文件名包含空格，请务必使用英文双引号括起来。</li>
+</ul>
+<h3 id="6-2-认识-Front-matter：文章的元数据"><a href="#6-2-认识-Front-matter：文章的元数据" class="headerlink" title="6.2 认识 Front-matter：文章的元数据"></a>6.2 认识 Front-matter：文章的元数据</h3><p>打开刚刚生成的 <code>.md</code> 文件，你会看到顶部有一段由 <code>---</code> 包围的代码，这就是 <strong>Front-matter</strong>。它告诉 Hexo 如何处理这篇文章。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">我的第一篇技术文章</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2023-10-27 10:00:00</span></span><br><span class="line"><span class="attr">tags:</span> [<span class="string">Hexo</span>, <span class="string">教程</span>]</span><br><span class="line"><span class="attr">categories:</span> <span class="string">技术心得</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">这是我使用</span> <span class="string">Hexo</span> <span class="string">搭建博客的第一篇记录，分享一下心得。</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="meta"></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>title：</strong> 文章标题（可以和文件名不同）。</li>
+<li><strong>date：</strong> 发布日期（通常自动生成）。</li>
+<li><strong>tags：</strong> 标签（一篇文章可以有多个标签）。</li>
+<li><strong>categories：</strong> 分类（建议每篇文章只有一个主分类）。</li>
+<li><strong>top_img &#x2F; index_img：</strong> 很多主题支持在这里设置文章的封面图。</li>
+</ul>
+<h3 id="6-3-Markdown-写作建议"><a href="#6-3-Markdown-写作建议" class="headerlink" title="6.3 Markdown 写作建议"></a>6.3 Markdown 写作建议</h3><p>你现在可以使用任何编辑器（推荐 <strong>Typora</strong> 或 <strong>VS Code</strong>）开始书写正文。</p>
+<p>对于技术博客，以下三个 Markdown 语法最常用：</p>
+<ol>
+<li><strong>分级标题：</strong> 使用 <code>#</code>、<code>##</code> 来构建目录。</li>
+<li><strong>代码块：</strong> 使用 <code> </code> <code>语法。Hexo 会根据你在</code>_config.yml&#96; 的设置自动高亮代码。</li>
+<li><strong>引用：</strong> 使用 <code>&gt;</code> 来标注参考资料或重点提示。</li>
+</ol>
+<h3 id="6-4-插入图片的两种“姿势”"><a href="#6-4-插入图片的两种“姿势”" class="headerlink" title="6.4 插入图片的两种“姿势”"></a>6.4 插入图片的两种“姿势”</h3><p>在静态博客中处理图片是一个难点，这里推荐两种方案：</p>
+<p><strong>方案 A：本地资源文件夹（适合新手）</strong></p>
+<ol>
+<li>修改 <code>_config.yml</code> 中的 <code>post_asset_folder: true</code>。</li>
+<li>以后执行 <code>hexo new</code> 时，会额外生成一个同名的文件夹。</li>
+<li>将图片放入该文件夹，然后在 Markdown 中引用：<code>![描述](图片文件名.jpg)</code>。</li>
+</ol>
+<p><strong>方案 B：图床方案（进阶推荐，加载飞快）</strong></p>
+<p>将图片上传到专门的存储服务器（如 阿里云 OSS、腾讯云 COS，或者通过 <strong>PicGo + GitHub</strong> 搭建免费图床）。</p>
+<ul>
+<li><strong>优点：</strong> 减少博客源码体积，提升全球访问速度。</li>
+<li><strong>引用方式：</strong> <code>![描述](https://你的图床链接.jpg)</code>。</li>
+</ul>
+<h3 id="6-5-预览与发布"><a href="#6-5-预览与发布" class="headerlink" title="6.5 预览与发布"></a>6.5 预览与发布</h3><p>每写完一段，都可以执行 <code>hexo s</code> 并在浏览器刷新查看效果。Hexo 支持“热更新”，你保存 Markdown 文件后，本地预览通常会自动刷新。</p>
+<hr>
+<ol>
+<li><p><strong>“阅读更多”截断：</strong></p>
+<p> 如果不希望首页显示文章全文，可以在正文中插入 <code>&lt;!-- more --&gt;</code>。</p>
+<ul>
+<li><code>&lt;!-- more --&gt;</code> 之前的内容会作为摘要显示在首页。</li>
+<li>之后的文字点击“阅读更多”后才能看到。</li>
+</ul>
+</li>
+<li><p><strong>Emoji 表情支持：</strong></p>
+<p> 技术文档太枯燥？尝试加入一些 Emoji 🚀（Win 键 + <code>.</code> 即可唤出），会让页面生动很多。</p>
+</li>
+<li><p><strong>文章命名建议：</strong></p>
+<p> 虽然 <code>hexo new</code> 支持中文名，但建议文件名使用 <strong>英文或拼音</strong>（例如 <code>hello-world.md</code>），而把真正的中文标题写在 Front-matter 的 <code>title</code> 里。这能避免在某些系统下出现 URL 乱码或路径解析错误。</p>
+</li>
+</ol>
+<hr>
+<h2 id="7-部署上线-Deployment"><a href="#7-部署上线-Deployment" class="headerlink" title="7. 部署上线 (Deployment)"></a>7. 部署上线 (Deployment)</h2><p>Hexo 最强大的功能之一就是<strong>一键部署</strong>。通过简单的配置，你可以将生成的静态页面瞬间发布到 GitHub Pages。</p>
+<h3 id="7-1-准备“停机坪”：GitHub-仓库"><a href="#7-1-准备“停机坪”：GitHub-仓库" class="headerlink" title="7.1 准备“停机坪”：GitHub 仓库"></a>7.1 准备“停机坪”：GitHub 仓库</h3><p>在环境准备阶段，我们已经提到了仓库创建，这里再强调两个核心细节：</p>
+<ul>
+<li><strong>仓库命名：</strong> 必须是 <code>你的用户名.github.io</code>。</li>
+<li><strong>仓库属性：</strong> 必须设为 <strong>Public</strong>（公开），否则 GitHub Pages 无法免费提供静态托管服务。</li>
+</ul>
+<h3 id="7-2-安装部署插件"><a href="#7-2-安装部署插件" class="headerlink" title="7.2 安装部署插件"></a>7.2 安装部署插件</h3><p>Hexo 本身并不直接具备“上传到 Git”的功能，需要安装一个官方支持的插件：</p>
+<p>在博客根目录下执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-配置站点部署信息"><a href="#7-3-配置站点部署信息" class="headerlink" title="7.3 配置站点部署信息"></a>7.3 配置站点部署信息</h3><p>打开<strong>根目录</strong>下的 <code>_config.yml</code>（站点配置文件），滑到文件最底部，找到 <code>deploy</code> 字段，修改如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用户名/你的用户名.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>repo 的选择：</strong> 建议使用 <strong>SSH 地址</strong>（如上所示），这样配合 SSH Key 可以实现免密推送。如果你还没配置 SSH，也可以使用 HTTPS 地址。</li>
+<li><strong>branch：</strong> 目前 GitHub 默认主分支名为 <code>main</code>，请确保此处与你仓库的分支名一致。</li>
+</ul>
+<h3 id="7-4-一键发布：见证奇迹的时刻"><a href="#7-4-一键发布：见证奇迹的时刻" class="headerlink" title="7.4 一键发布：见证奇迹的时刻"></a>7.4 一键发布：见证奇迹的时刻</h3><p>现在，只需要在终端输入这一行“神咒”：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>g</code> (generate)：</strong> 生成静态文件。</li>
+<li><strong><code>d</code> (deploy)：</strong> 部署到远程仓库。</li>
+<li><strong>执行过程：</strong> Hexo 会自动扫描你的文章，转换成 HTML，然后通过 Git 推送到你的 GitHub 仓库。</li>
+</ul>
+<blockquote>
+<p>检查结果： 稍等 1-2 分钟（GitHub 部署需要时间），访问 https:&#x2F;&#x2F;你的用户名.github.io，你应该就能看到你的博客已经在公网上运行了！</p>
+</blockquote>
+<h3 id="7-5-进阶：绑定个人域名-Optional"><a href="#7-5-进阶：绑定个人域名-Optional" class="headerlink" title="7.5 进阶：绑定个人域名 (Optional)"></a>7.5 进阶：绑定个人域名 (Optional)</h3><p>如果你觉得 <code>.github.io</code> 后缀不够专业，想拥有类似 <code>www.yourname.com</code> 的域名：</p>
+<ol>
+<li><strong>购买域名：</strong> 在阿里云、腾讯云或 GoDaddy 购买。</li>
+<li><strong>设置 DNS 解析：</strong> 在域名后台添加一条 <code>CNAME</code> 记录，指向 <code>你的用户名.github.io</code>。</li>
+<li><strong>Hexo 配置：</strong> 在 <code>source</code> 目录下新建一个名为 **<code>CNAME</code>**（无后缀）的文件，内容只写你的域名（如 <code>www.yourname.com</code>）。<ul>
+<li><em>为什么要放在 source 下？</em> 因为每次 <code>hexo clean</code> 都会清空 public，只有放在 source 下，部署时才会自动同步到 GitHub 根目录，保证域名设置不丢失。</li>
+</ul>
+</li>
+<li><strong>GitHub 设置：</strong> 在仓库的 <code>Settings -&gt; Pages</code> 菜单中，勾选 <strong>Enforce HTTPS</strong>，让你的博客更安全。</li>
+</ol>
+<hr>
+<h2 id="8-源码备份：别让你的心血付诸东流"><a href="#8-源码备份：别让你的心血付诸东流" class="headerlink" title="8. 源码备份：别让你的心血付诸东流"></a>8. 源码备份：别让你的心血付诸东流</h2><p>在 Hexo 的世界里，有一个最基础但也最致命的误解：<strong>以为执行了 <code>hexo d</code>，你的博客就安全了。</strong></p>
+<h3 id="8-1-警示：hexo-d-推送的到底是什么？"><a href="#8-1-警示：hexo-d-推送的到底是什么？" class="headerlink" title="8.1 警示：hexo d 推送的到底是什么？"></a>8.1 警示：<code>hexo d</code> 推送的到底是什么？</h3><p>当你执行 <code>hexo d</code> 时，Hexo 只是把 <code>public</code> 文件夹（即生成的 HTML 静态页面）推送到 GitHub。</p>
+<ul>
+<li><strong>它不包括：</strong> 你的 <code>_config.yml</code> 配置文件、你的主题源码、以及最重要的——你辛苦撰写的 Markdown 原稿。</li>
+<li><strong>后果：</strong> 一旦你的电脑硬盘损坏或重装系统，你将彻底失去对博客的控制权。你看着线上的博客，却再也无法修改它。</li>
+</ul>
+<h3 id="8-2-最佳实践：双分支备份法"><a href="#8-2-最佳实践：双分支备份法" class="headerlink" title="8.2 最佳实践：双分支备份法"></a>8.2 最佳实践：双分支备份法</h3><p>我们建议利用同一个 GitHub 仓库，通过不同的“分支”来分别存放<strong>静态网页</strong>和<strong>博客源码</strong>。</p>
+<ol>
+<li><p><strong>准备 <code>.gitignore</code>：</strong></p>
+<p> 在博客根目录创建一个 <code>.gitignore</code> 文件（通常 Hexo 自带了），确保以下文件<strong>不会</strong>被备份（因为它们可以通过命令自动生成）：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy_git/</span><br><span class="line">db.json</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>创建并推送源码分支：</strong></p>
+<p> 在你的本地博客根目录打开终端，执行以下命令：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git remote add origin git@github.com:你的用户名/你的用户名.github.io.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个名为 hexo 的新分支用于存放源码</span></span><br><span class="line">git checkout -b hexo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交并推送</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;Backup hexo source code&quot;</span></span><br><span class="line">git push origin hexo</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>现在的仓库结构：</strong></p>
+<ul>
+<li><strong><code>main</code> 分支：</strong> 存放生成的静态 HTML（由 <code>hexo d</code> 自动更新）。</li>
+<li><strong><code>hexo</code> 分支：</strong> 存放你的整个 Hexo 源码项目（由你手动 <code>git push</code> 更新）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="8-3-多端协作：换台电脑也能写"><a href="#8-3-多端协作：换台电脑也能写" class="headerlink" title="8.3 多端协作：换台电脑也能写"></a>8.3 多端协作：换台电脑也能写</h3><p>如果你买了新电脑，或者想在公司摸鱼写博客，只需几步即可找回环境：</p>
+<ol>
+<li><p><strong>克隆源码分支：</strong></p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b hexo git@github.com:你的用户名/你的用户名.github.io.git</span><br><span class="line"><span class="built_in">cd</span> 你的用户名.github.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>恢复环境：</strong>由于我们备份了 <code>package.json</code>，你不需要重新一个个安装插件，只需一行命令：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line"><span class="comment"># 如果你全局没装 hexo-cli，也记得装一下</span></span><br><span class="line">npm install -g hexo-cli</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>开始写作：</strong>现在的环境和老电脑上一模一样，你可以继续 <code>hexo new</code>、<code>hexo g -d</code> 了。</p>
+</li>
+</ol>
+<hr>
+<h2 id="9-结语-Conclusion"><a href="#9-结语-Conclusion" class="headerlink" title="9. 结语 (Conclusion)"></a>9. 结语 (Conclusion)</h2><p>恭喜你！如果你完整地走到了这一步，你已经成功在浩瀚的互联网世界中圈下了一块属于自己的“数字领地”。从环境配置到源码备份，你不仅掌握了一套高效的工具流，更完成了一次从“信息消费者”向“内容生产者”的角色转变。</p>
+<h3 id="9-1-搭建只是开始，内容才是灵魂"><a href="#9-1-搭建只是开始，内容才是灵魂" class="headerlink" title="9.1 搭建只是开始，内容才是灵魂"></a>9.1 搭建只是开始，内容才是灵魂</h3><p>在博客圈有一个常见的陷阱：<strong>“折腾不止，写作不始”</strong>。很多开发者会花费大量的时间在更换主题、调色、折腾特效上，却迟迟不写第一篇文章。</p>
+<p>请记住：</p>
+<ul>
+<li><strong>博客的价值在于文字：</strong> 一个只有精美外壳而没有思想内涵的博客，就像一座空房子。</li>
+<li><strong>保持输出：</strong> 写博客不是为了向世界展示你有多聪明，而是为了整理自己的思绪。哪怕只是记录一个困扰你一小时的 Bug 解决方法，对未来的你和社区的后来者都有巨大的意义。</li>
+<li><strong>不积跬步无以至千里：</strong> 不需要追求篇篇都是深度长文。持续、真实地记录你的技术成长，时间会赋予你的博客惊人的复利效应。</li>
+</ul>
+<h3 id="9-2-开启你的技术社交之旅"><a href="#9-2-开启你的技术社交之旅" class="headerlink" title="9.2 开启你的技术社交之旅"></a>9.2 开启你的技术社交之旅</h3><p>独立博客虽然是一座“孤岛”，但它通过链接和搜索与整个互联网相连。</p>
+<ul>
+<li><strong>保持好奇心：</strong> 随着你写的文章越来越多，你会发现自己对技术的理解变得更加通透。</li>
+<li><strong>积极互动：</strong> 在你的博文中引用他人的观点，在评论区回复读者的疑问。你会发现，博客是你建立技术圈影响力的敲门砖。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>从零开始：使用 Hexo + GitHub Pages 搭建你的第一个个人博客</p><p><a href="https://yiluqingtai.github.io/2025/12/20/从零开始：使用-Hexo-GitHub-Pages-搭建你的第一个个人博客/">https://yiluqingtai.github.io/2025/12/20/从零开始：使用-Hexo-GitHub-Pages-搭建你的第一个个人博客/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>yiluqingtai</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-12-20</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Hexo/">Hexo</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a><a class="link-muted mr-2" rel="tag" href="/tags/Node-js/">Node.js</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/12/20/Docker%20%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%E2%80%9C%E4%BB%A3%E7%A0%81%E8%83%BD%E8%B7%91%E2%80%9D%E5%88%B0%E2%80%9C%E7%8E%AF%E5%A2%83%E8%87%AA%E7%94%B1%E2%80%9D/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Docker 零基础入门：从“代码能跑”到“环境自由”</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/05/12/Leetcode13-%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0/"><span class="level-item">Leetcode13-罗马数字转整数</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="yiluqingtai"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">yiluqingtai</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives/"><p class="title">36</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories/"><p class="title">12</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags/"><p class="title">78</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/yiluqingtai" target="_blank" rel="me noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Github" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="me noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-前言-Introduction"><span class="level-left"><span class="level-item">1. 前言 (Introduction)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-1-为什么要写博客？——建立你的“数字花园”"><span class="level-left"><span class="level-item">1.1 为什么要写博客？——建立你的“数字花园”</span></span></a></li><li><a class="level is-mobile" href="#1-2-为什么选择-Hexo？——轻量与极致的平衡"><span class="level-left"><span class="level-item">1.2 为什么选择 Hexo？——轻量与极致的平衡</span></span></a></li><li><a class="level is-mobile" href="#1-3-本文你能学到什么？——从零到一的实战地图"><span class="level-left"><span class="level-item">1.3 本文你能学到什么？——从零到一的实战地图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#2-环境准备-Prerequisites"><span class="level-left"><span class="level-item">2. 环境准备 (Prerequisites)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-安装-Node-js：Hexo-的心脏"><span class="level-left"><span class="level-item">2.1 安装 Node.js：Hexo 的心脏</span></span></a></li><li><a class="level is-mobile" href="#2-2-安装-Git：代码管理与自动部署"><span class="level-left"><span class="level-item">2.2 安装 Git：代码管理与自动部署</span></span></a></li><li><a class="level is-mobile" href="#2-3-GitHub-账号与仓库准备：你的免费服务器"><span class="level-left"><span class="level-item">2.3 GitHub 账号与仓库准备：你的免费服务器</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-Hexo-安装与初始化-Getting-Started"><span class="level-left"><span class="level-item">3. Hexo 安装与初始化 (Getting Started)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#3-1-安装-Hexo-cli-工具"><span class="level-left"><span class="level-item">3.1 安装 Hexo-cli 工具</span></span></a></li><li><a class="level is-mobile" href="#3-2-初始化博客文件夹"><span class="level-left"><span class="level-item">3.2 初始化博客文件夹</span></span></a></li><li><a class="level is-mobile" href="#3-3-本地预览：见证奇迹的时刻"><span class="level-left"><span class="level-item">3.3 本地预览：见证奇迹的时刻</span></span></a></li><li><a class="level is-mobile" href="#3-4-目录结构详解：别被这些文件吓到"><span class="level-left"><span class="level-item">3.4 目录结构详解：别被这些文件吓到</span></span></a></li></ul></li><li><a class="level is-mobile" href="#4-博客基础配置-Configuration"><span class="level-left"><span class="level-item">4. 博客基础配置 (Configuration)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#4-1-打造你的个人名片：站点信息修改"><span class="level-left"><span class="level-item">4.1 打造你的个人名片：站点信息修改</span></span></a></li><li><a class="level is-mobile" href="#4-2-设置站点-URL：让搜索引擎找到你"><span class="level-left"><span class="level-item">4.2 设置站点 URL：让搜索引擎找到你</span></span></a></li><li><a class="level is-mobile" href="#4-3-优化永久链接-Permalinks-：让-URL-更优雅"><span class="level-left"><span class="level-item">4.3 优化永久链接 (Permalinks)：让 URL 更优雅</span></span></a></li><li><a class="level is-mobile" href="#4-4-开启代码高亮"><span class="level-left"><span class="level-item">4.4 开启代码高亮</span></span></a></li></ul></li><li><a class="level is-mobile" href="#5-主题美化：给博客“换装”-Themes"><span class="level-left"><span class="level-item">5. 主题美化：给博客“换装” (Themes)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#5-1-挑选心仪的主题"><span class="level-left"><span class="level-item">5.1 挑选心仪的主题</span></span></a></li><li><a class="level is-mobile" href="#5-2-更换主题的通用流程"><span class="level-left"><span class="level-item">5.2 更换主题的通用流程</span></span></a></li><li><a class="level is-mobile" href="#5-3-个性化微调：细节决定质感"><span class="level-left"><span class="level-item">5.3 个性化微调：细节决定质感</span></span></a></li><li><a class="level is-mobile" href="#5-4-验证效果"><span class="level-left"><span class="level-item">5.4 验证效果</span></span></a></li></ul></li><li><a class="level is-mobile" href="#6-开启创作：写下第一篇文章-Writing"><span class="level-left"><span class="level-item">6. 开启创作：写下第一篇文章 (Writing)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#6-1-新建一篇文章"><span class="level-left"><span class="level-item">6.1 新建一篇文章</span></span></a></li><li><a class="level is-mobile" href="#6-2-认识-Front-matter：文章的元数据"><span class="level-left"><span class="level-item">6.2 认识 Front-matter：文章的元数据</span></span></a></li><li><a class="level is-mobile" href="#6-3-Markdown-写作建议"><span class="level-left"><span class="level-item">6.3 Markdown 写作建议</span></span></a></li><li><a class="level is-mobile" href="#6-4-插入图片的两种“姿势”"><span class="level-left"><span class="level-item">6.4 插入图片的两种“姿势”</span></span></a></li><li><a class="level is-mobile" href="#6-5-预览与发布"><span class="level-left"><span class="level-item">6.5 预览与发布</span></span></a></li></ul></li><li><a class="level is-mobile" href="#7-部署上线-Deployment"><span class="level-left"><span class="level-item">7. 部署上线 (Deployment)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#7-1-准备“停机坪”：GitHub-仓库"><span class="level-left"><span class="level-item">7.1 准备“停机坪”：GitHub 仓库</span></span></a></li><li><a class="level is-mobile" href="#7-2-安装部署插件"><span class="level-left"><span class="level-item">7.2 安装部署插件</span></span></a></li><li><a class="level is-mobile" href="#7-3-配置站点部署信息"><span class="level-left"><span class="level-item">7.3 配置站点部署信息</span></span></a></li><li><a class="level is-mobile" href="#7-4-一键发布：见证奇迹的时刻"><span class="level-left"><span class="level-item">7.4 一键发布：见证奇迹的时刻</span></span></a></li><li><a class="level is-mobile" href="#7-5-进阶：绑定个人域名-Optional"><span class="level-left"><span class="level-item">7.5 进阶：绑定个人域名 (Optional)</span></span></a></li></ul></li><li><a class="level is-mobile" href="#8-源码备份：别让你的心血付诸东流"><span class="level-left"><span class="level-item">8. 源码备份：别让你的心血付诸东流</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#8-1-警示：hexo-d-推送的到底是什么？"><span class="level-left"><span class="level-item">8.1 警示：hexo d 推送的到底是什么？</span></span></a></li><li><a class="level is-mobile" href="#8-2-最佳实践：双分支备份法"><span class="level-left"><span class="level-item">8.2 最佳实践：双分支备份法</span></span></a></li><li><a class="level is-mobile" href="#8-3-多端协作：换台电脑也能写"><span class="level-left"><span class="level-item">8.3 多端协作：换台电脑也能写</span></span></a></li></ul></li><li><a class="level is-mobile" href="#9-结语-Conclusion"><span class="level-left"><span class="level-item">9. 结语 (Conclusion)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#9-1-搭建只是开始，内容才是灵魂"><span class="level-left"><span class="level-item">9.1 搭建只是开始，内容才是灵魂</span></span></a></li><li><a class="level is-mobile" href="#9-2-开启你的技术社交之旅"><span class="level-left"><span class="level-item">9.2 开启你的技术社交之旅</span></span></a></li></ul></li></ul></div></div><script src="/js/toc.js" defer></script></div><div class="column-right-shadow is-hidden-widescreen is-sticky"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3 is-sticky"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Docker/"><span class="level-start"><span class="level-item">Docker</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Markdown/"><span class="level-start"><span class="level-item">Markdown</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"><span class="level-start"><span class="level-item">大数据</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/"><span class="level-start"><span class="level-item">大模型</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/"><span class="level-start"><span class="level-item">室内绿植</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/"><span class="level-start"><span class="level-item">技术教程</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E8%B5%84%E6%BA%90/"><span class="level-start"><span class="level-item">技术资源</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"><span class="level-start"><span class="level-item">生活随笔</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D/"><span class="level-start"><span class="level-item">经济金融</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%8C%B6/"><span class="level-start"><span class="level-item">茶</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AF%BB%E5%90%8E%E6%84%9F/"><span class="level-start"><span class="level-item">读后感</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-11T13:15:23.000Z">2026-01-11</time></p><p class="title"><a href="/2026/01/11/%E9%83%BD%E5%B8%82%E7%BB%BF%E6%B4%B2%E5%85%BB%E6%88%90%E8%AE%B0%EF%BC%9A%E5%A6%82%E4%BD%95%E8%AE%A9%E6%8C%BA%E6%8B%94%E7%9A%84%E8%99%8E%E7%9A%AE%E5%85%B0%E6%88%90%E4%B8%BA%E4%BD%A0%E5%AE%A4%E5%86%85%E7%9A%84%E2%80%9C%E4%BD%8E%E8%80%97%E8%83%BD%E4%BF%9D%E9%95%96%E2%80%9D%EF%BC%9F/">都市绿洲养成记：如何让挺拔的虎皮兰成为你室内的“低耗能保镖”？</a></p><p class="categories"><a href="/categories/%E5%AE%A4%E5%86%85%E7%BB%BF%E6%A4%8D/">室内绿植</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T14:50:26.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82-Spark%EF%BC%9A%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E3%80%81%E7%94%9F%E6%80%81%E5%8D%8F%E5%90%8C%E4%B8%8E%E4%BC%81%E4%B8%9A%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B/">一文搞懂 Spark：核心原理、生态协同与企业实战选型</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-08T01:46:34.000Z">2026-01-08</time></p><p class="title"><a href="/2026/01/08/%E3%80%90%E6%95%B0%E6%8D%AE%E6%B1%9F%E6%B9%96%E5%85%B5%E5%99%A8%E8%B0%B1%E3%80%91%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E4%B8%BB%E6%B5%81%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E7%9A%84%E2%80%9C%E8%A7%92%E8%89%B2%E2%80%9D%E4%B8%8E%E2%80%9C%E5%86%85%E5%8A%9F%E2%80%9D-Kafka-Spark-Hive-Flink-ClickHouse/">【数据江湖兵器谱】一文读懂主流大数据工具的“角色”与“内功” (Kafka/Spark/Hive/Flink/ClickHouse)</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-07T15:29:11.000Z">2026-01-07</time></p><p class="title"><a href="/2026/01/07/AI-%E6%B5%AA%E6%BD%AE%E4%B8%8B%EF%BC%8C%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E2%80%9C%E4%B8%8A%E8%BD%A6%E2%80%9D%EF%BC%9F%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B0%B1%E4%B8%9A%E7%9A%84-6-%E5%A4%A7%E7%BB%86%E5%88%86%E6%96%B9%E5%90%91%E5%85%A8%E8%A7%A3%E6%9E%90/">AI 浪潮下，普通程序员如何“上车”？大模型就业的 6 大细分方向全解析</a></p><p class="categories"><a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2026-01-06T01:24:41.000Z">2026-01-06</time></p><p class="title"><a href="/2026/01/06/%E7%BB%99%E6%96%B0%E6%89%8B%E7%9A%84%E8%8C%B6%E5%8F%B6%E9%80%9A%E5%85%B3%E6%89%8B%E5%86%8C%EF%BC%9A%E4%BB%8E%E2%80%9C%E7%BB%BF%E8%8C%B6%E5%B0%8F%E7%99%BD%E2%80%9D%E5%88%B0%E2%80%9C%E5%93%81%E8%8C%97%E9%AB%98%E6%89%8B%E2%80%9D%E5%8F%AA%E9%9C%80%E8%BF%99%E4%B8%80%E7%AF%87/">给新手的茶叶通关手册：从“绿茶小白”到“品茗高手”只需这一篇</a></p><p class="categories"><a href="/categories/%E8%8C%B6/">茶</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://avatars.githubusercontent.com/u/16957962?s=96&amp;v=4" alt="Yiluqingtai&#039;s Blog" height="28"></a><p class="is-size-7"><span>&copy; 2026 yiluqingtai</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/yiluqingtai"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script><!-- hexo injector body_end start -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script>
+    (function() {
+        const mermaidKeywords = ['graph ', 'sequenceDiagram', 'gantt', 'classDiagram', 'stateDiagram', 'pie', 'erDiagram', 'journey'];
+
+        function renderMermaid() {
+            if (!window.mermaid) return;
+
+            // 扫描所有的 highlight 代码块
+            const blocks = document.querySelectorAll('.highlight');
+            
+            blocks.forEach(block => {
+                const codeElement = block.querySelector('.code');
+                if (!codeElement) return;
+                
+                const rawCode = codeElement.innerText.trim();
+                
+                // 检查开头是否符合 Mermaid 语法
+                const isMermaid = mermaidKeywords.some(kw => rawCode.startsWith(kw));
+                
+                if (isMermaid) {
+                    const container = document.createElement('div');
+                    container.className = 'mermaid';
+                    container.textContent = rawCode;
+
+                    // 替换掉整个 figure 标签
+                    block.parentNode.insertBefore(container, block);
+                    block.remove();
+                }
+            });
+
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose',
+                flowchart: { 
+                    htmlLabels: false, // 设为 false 能极大缓解文字溢出问题
+                    useMaxWidth: true 
+                }
+            });
+            
+            mermaid.run();
+        }
+
+        window.addEventListener('load', renderMermaid);
+        document.addEventListener('pjax:success', renderMermaid);
+    })();
+    </script>
+    <!-- hexo injector body_end end --></body></html>
