@@ -1,0 +1,26 @@
+/* 1. 强制撑开主容器 */
+.container {
+    max-width: 1500px !important; /* 调整为你想达到的总宽度 */
+    width: 95% !important;
+}
+
+/* 2. 针对大屏幕 (Widescreen) 和 超大屏幕 (FullHD) 的断点强制覆盖 */
+@media screen and (min-width: 1216px) {
+    .container {
+        max-width: 1400px !important;
+    }
+}
+
+@media screen and (min-width: 1408px) {
+    .container {
+        max-width: 1600px !important; /* 超大屏可以更宽 */
+    }
+}
+
+/* 3. 如果你想让中间内容比例更大，而侧边栏更窄 */
+.column.is-3-widescreen {
+    width: 20% !important; /* 缩小侧边栏 */
+}
+.column.is-6-widescreen {
+    width: 60% !important; /* 扩大中间栏 */
+}
